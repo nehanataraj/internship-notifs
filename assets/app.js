@@ -61,10 +61,24 @@ const App = (() => {
     return PROXY;
   }
 
+  function normalizeToken(raw) {
+    let t = String(raw).trim().replace(/^["']|["']$/g, "");
+    const m = t.match(/(\d{5,}:[A-Za-z0-9_-]+)/);
+    return (m ? m[1] : t.replace(/\s/g, "")).replace(/[^\d:A-Za-z0-9_-]/g, "");
+  }
+
+  function normalizeChat(raw) {
+    const c = String(raw).trim().replace(/\s/g, "");
+    const m = c.match(/(-?\d{5,})/);
+    return m ? m[1] : c;
+  }
+
   function sanitizeCfg(token, chat) {
-    const t = token.trim();
-    const c = chat.trim();
-    if (!/^\d+:[A-Za-z0-9_-]+$/.test(t)) throw new Error("Bot token looks invalid — copy the full token from BotFather");
+    const t = normalizeToken(token);
+    const c = normalizeChat(chat);
+    if (!/^\d+:[A-Za-z0-9_-]{10,}$/.test(t)) {
+      throw new Error("Paste the full bot token from BotFather (format: 123456789:ABC…)");
+    }
     if (!/^-?\d+$/.test(c)) throw new Error("Chat ID must be numeric (e.g. 6062137847)");
     return { token: t, chat: c };
   }
@@ -222,6 +236,8 @@ const App = (() => {
       status.textContent = "Sending…"; status.className = "modal-status";
       try {
         cfg = sanitizeCfg($("tgToken").value, $("tgChat").value);
+        $("tgToken").value = cfg.token;
+        $("tgChat").value = cfg.chat;
         await tg("getMe", {});
         await tg("sendMessage", {
           chat_id: cfg.chat,
