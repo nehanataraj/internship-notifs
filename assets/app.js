@@ -34,6 +34,12 @@ const App = (() => {
     try { return JSON.parse(localStorage.getItem(CFG_KEY)) || null; } catch { return null; }
   }
 
+  function boot() {
+    if ((localStorage.getItem("jt.proxy") || "").includes("internship-notifs.vercel.app")) {
+      localStorage.removeItem("jt.proxy");
+    }
+  }
+
   /* magic link: #cfg=base64(token|chat) — saved once, then stripped from URL */
   function absorbMagicLink() {
     const m = location.hash.match(/#cfg=([A-Za-z0-9+/=_-]+)/);
@@ -49,56 +55,48 @@ const App = (() => {
     history.replaceState(null, "", location.pathname + location.search);
   }
 
+  const PROXY = "https://webapp-two-peach.vercel.app/api/telegram";
+
   /* ───────── telegram (via proxy — browsers cannot call api.telegram.org directly) ───────── */
   function proxyUrl() {
     if (location.hostname.endsWith(".vercel.app")) return "/api/telegram";
     const override = localStorage.getItem("jt.proxy");
-    if (override) return override;
-    return "https://webapp-two-peach.vercel.app/api/telegram";
+    if (override && !override.includes("internship-notifs.vercel.app")) return override;
+    return PROXY;
+  }
+
+  function sanitizeCfg(token, chat) {
+    const t = token.trim();
+    const c = chat.trim();
+    if (!/^\d+:[A-Za-z0-9_-]+$/.test(t)) throw new Error("Bot token looks invalid — copy the full token from BotFather");
+    if (!/^-?\d+$/.test(c)) throw new Error("Chat ID must be numeric (e.g. 6062137847)");
+    return { token: t, chat: c };
   }
 
   async function tg(method, params) {
     if (!cfg) throw new Error("no-config");
-    const errors = [];
-    for (const attempt of [tgViaProxy, tgViaCorsProxy]) {
-      try {
-        return await attempt(method, params);
-      } catch (e) {
-        errors.push(e.message);
-      }
-    }
-    throw new Error(errors.join(" · "));
+    return tgViaProxy(method, params);
   }
 
   async function tgViaProxy(method, params) {
+    const url = proxyUrl();
     let r;
     try {
-      r = await fetch(proxyUrl(), {
+      r = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ token: cfg.token, method, params: params || {} }),
       });
     } catch {
-      throw new Error("Proxy unreachable");
+      throw new Error(`Cannot reach sync proxy. Open ${PROXY.replace("/api/telegram", "")} and try again.`);
     }
-    const j = await r.json();
-    if (!j.ok) throw new Error(j.description || method + " failed");
-    return j.result;
-  }
-
-  async function tgViaCorsProxy(method, params) {
-    const target = `https://api.telegram.org/bot${cfg.token}/${method}`;
-    let r;
+    const text = await r.text();
+    let j;
     try {
-      r = await fetch(`https://corsproxy.io/?${encodeURIComponent(target)}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(params || {}),
-      });
+      j = JSON.parse(text);
     } catch {
-      throw new Error("CORS relay unreachable");
+      throw new Error(`Sync proxy returned ${r.status}. Hard-refresh the page (Ctrl+Shift+R).`);
     }
-    const j = await r.json();
     if (!j.ok) throw new Error(j.description || method + " failed");
     return j.result;
   }
@@ -212,23 +210,27 @@ const App = (() => {
       modal.showModal();
     });
     $("saveSyncBtn").addEventListener("click", () => {
-      const token = $("tgToken").value.trim();
-      const chat = $("tgChat").value.trim();
-      if (token && chat) {
-        cfg = { token, chat };
+      try {
+        const next = sanitizeCfg($("tgToken").value, $("tgChat").value);
+        cfg = next;
         localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
         pull();
         toast("Sync settings saved");
+      } catch (e) {
+        $("syncStatusMsg").textContent = e.message;
+        $("syncStatusMsg").className = "modal-status err";
       }
     });
     $("testSyncBtn").addEventListener("click", async () => {
       const status = $("syncStatusMsg");
-      const token = $("tgToken").value.trim(), chat = $("tgChat").value.trim();
-      if (!token || !chat) { status.textContent = "Enter both fields first."; status.className = "modal-status err"; return; }
       status.textContent = "Sending…"; status.className = "modal-status";
       try {
-        cfg = { token, chat };
-        await tg("sendMessage", { chat_id: chat, text: "Intern Tracker connected. Reminders will be sent 2 days before each OA and interview." });
+        cfg = sanitizeCfg($("tgToken").value, $("tgChat").value);
+        await tg("getMe", {});
+        await tg("sendMessage", {
+          chat_id: cfg.chat,
+          text: "Intern Tracker connected. Reminders will be sent 2 days before each OA and interview.",
+        });
         localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
         status.textContent = "Delivered — check Telegram. Settings saved."; status.className = "modal-status ok";
         await pull();
@@ -310,6 +312,7 @@ const App = (() => {
   }
 
   async function initBoard() {
+    boot();
     absorbMagicLink();
     wireSettings();
     await loadCompanies();
@@ -410,6 +413,7 @@ const App = (() => {
   }
 
   async function initCalendar() {
+    boot();
     absorbMagicLink();
     wireSettings();
     await loadCompanies();
