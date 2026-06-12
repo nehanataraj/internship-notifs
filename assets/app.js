@@ -49,14 +49,55 @@ const App = (() => {
     history.replaceState(null, "", location.pathname + location.search);
   }
 
-  /* ───────── telegram ───────── */
+  /* ───────── telegram (via proxy — browsers cannot call api.telegram.org directly) ───────── */
+  function proxyUrl() {
+    if (location.hostname.endsWith(".vercel.app")) return "/api/telegram";
+    const override = localStorage.getItem("jt.proxy");
+    if (override) return override;
+    return "https://webapp-two-peach.vercel.app/api/telegram";
+  }
+
   async function tg(method, params) {
     if (!cfg) throw new Error("no-config");
-    const r = await fetch(`https://api.telegram.org/bot${cfg.token}/${method}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(params || {}),
-    });
+    const errors = [];
+    for (const attempt of [tgViaProxy, tgViaCorsProxy]) {
+      try {
+        return await attempt(method, params);
+      } catch (e) {
+        errors.push(e.message);
+      }
+    }
+    throw new Error(errors.join(" · "));
+  }
+
+  async function tgViaProxy(method, params) {
+    let r;
+    try {
+      r = await fetch(proxyUrl(), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: cfg.token, method, params: params || {} }),
+      });
+    } catch {
+      throw new Error("Proxy unreachable");
+    }
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.description || method + " failed");
+    return j.result;
+  }
+
+  async function tgViaCorsProxy(method, params) {
+    const target = `https://api.telegram.org/bot${cfg.token}/${method}`;
+    let r;
+    try {
+      r = await fetch(`https://corsproxy.io/?${encodeURIComponent(target)}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(params || {}),
+      });
+    } catch {
+      throw new Error("CORS relay unreachable");
+    }
     const j = await r.json();
     if (!j.ok) throw new Error(j.description || method + " failed");
     return j.result;
