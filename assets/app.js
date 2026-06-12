@@ -8,6 +8,7 @@
 const App = (() => {
   const DATA_KEY = "jt.data.v1";
   const CFG_KEY = "jt.cfg.v1";
+  const PIN_KEY = "jt.pin.v1";
   const MARKER = "JTRACK::";
 
   /* ───────── state ───────── */
@@ -36,6 +37,15 @@ const App = (() => {
 
   function boot() {
     localStorage.removeItem("jt.proxy");
+    const stored = Number(localStorage.getItem(PIN_KEY));
+    if (stored) pinnedMsgId = stored;
+  }
+
+  function savePinId(id) {
+    if (id) {
+      pinnedMsgId = id;
+      localStorage.setItem(PIN_KEY, String(id));
+    }
   }
 
   /* magic link: #cfg=base64(token|chat) — saved once, then stripped from URL */
@@ -120,16 +130,29 @@ const App = (() => {
     try { return JSON.parse(text.slice(i + MARKER.length)); } catch { return null; }
   }
 
-  async function pull() {
+  async function refreshConnection() {
     if (!cfg) return setDot("");
     setDot("busy");
+    try {
+      await tg("getMe", {});
+      setDot("ok");
+      return true;
+    } catch (e) {
+      console.warn("connection check failed", e);
+      setDot("err");
+      return false;
+    }
+  }
+
+  async function pull() {
+    if (!cfg) return;
     try {
       const chat = await tg("getChat", { chat_id: cfg.chat });
       const pm = chat.pinned_message;
       if (pm && pm.text) {
         const remote = decodeData(pm.text);
         if (remote) {
-          pinnedMsgId = pm.message_id;
+          savePinId(pm.message_id);
           if ((remote.updatedAt || 0) > (data.updatedAt || 0)) {
             data = {
               applied: remote.applied || {},
@@ -144,38 +167,47 @@ const App = (() => {
           }
         }
       } else if (data.updatedAt) {
-        schedulePush(); // no pinned store yet — create one
+        schedulePush();
       }
-      setDot("ok");
     } catch (e) {
       console.warn("pull failed", e);
-      setDot("err");
     }
   }
 
   async function push() {
     if (!cfg) return;
-    setDot("busy");
     const text = encodeData();
     try {
       if (pinnedMsgId) {
         try {
           await tg("editMessageText", { chat_id: cfg.chat, message_id: pinnedMsgId, text });
+          return;
         } catch (e) {
-          if (!/exactly the same/i.test(String(e))) {
-            pinnedMsgId = null; // stale id — recreate below
-          }
+          if (/exactly the same/i.test(String(e))) return;
+          pinnedMsgId = null;
         }
       }
-      if (!pinnedMsgId) {
-        const msg = await tg("sendMessage", { chat_id: cfg.chat, text, disable_notification: true });
-        pinnedMsgId = msg.message_id;
-        await tg("pinChatMessage", { chat_id: cfg.chat, message_id: pinnedMsgId, disable_notification: true });
+      const chat = await tg("getChat", { chat_id: cfg.chat });
+      const pm = chat.pinned_message;
+      if (pm?.text && decodeData(pm.text)) {
+        savePinId(pm.message_id);
+        try {
+          await tg("editMessageText", { chat_id: cfg.chat, message_id: pinnedMsgId, text });
+          return;
+        } catch {
+          console.warn("cannot edit pinned sync message — use InternshipJobWatcherBot token in Settings");
+          return;
+        }
       }
-      setDot("ok");
+      const msg = await tg("sendMessage", { chat_id: cfg.chat, text, disable_notification: true });
+      savePinId(msg.message_id);
+      try {
+        await tg("pinChatMessage", { chat_id: cfg.chat, message_id: pinnedMsgId, disable_notification: true });
+      } catch {
+        toast("Sync message sent — pin it in Telegram to finish setup");
+      }
     } catch (e) {
       console.warn("push failed", e);
-      setDot("err");
     }
   }
 
@@ -199,7 +231,13 @@ const App = (() => {
     const dot = $("syncDot");
     if (!dot) return;
     dot.className = "sync-dot" + (state ? " " + state : "");
-    dot.title = { ok: "Synced with Telegram", err: "Sync error — check settings", busy: "Syncing…", "": "Sync off — open Settings" }[state] || "";
+    dot.title = {
+      ok: "Connected to Telegram",
+      err: "Telegram connection failed — check Settings",
+      busy: "Checking connection…",
+      "": "Not connected — open Settings",
+    }[state] || "";
+    dot.setAttribute("aria-label", dot.title);
   }
 
   let toastTimer = null;
@@ -224,7 +262,7 @@ const App = (() => {
         const next = sanitizeCfg($("tgToken").value, $("tgChat").value);
         cfg = next;
         localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
-        pull();
+        refreshConnection().then(() => pull());
         toast("Sync settings saved");
       } catch (e) {
         $("syncStatusMsg").textContent = e.message;
@@ -239,16 +277,19 @@ const App = (() => {
         $("tgToken").value = cfg.token;
         $("tgChat").value = cfg.chat;
         await tg("getMe", {});
+        setDot("ok");
         await tg("sendMessage", {
           chat_id: cfg.chat,
           text: "Intern Tracker connected. Reminders will be sent 2 days before each OA and interview.",
         });
         localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
         status.textContent = "Delivered — check Telegram. Settings saved."; status.className = "modal-status ok";
+        await refreshConnection();
         await pull();
         toast("Sync settings saved");
       } catch (e) {
         status.textContent = "Failed: " + e.message; status.className = "modal-status err";
+        setDot("err");
       }
     });
   }
@@ -338,7 +379,7 @@ const App = (() => {
 
     rerender = renderBoard;
     renderBoard();
-    pull();
+    refreshConnection().then(() => pull());
   }
 
   /* ───────── calendar page ───────── */
@@ -465,7 +506,7 @@ const App = (() => {
 
     rerender = renderCalendar;
     renderCalendar();
-    pull();
+    refreshConnection().then(() => pull());
   }
 
   /* ───────── utils ───────── */

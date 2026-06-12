@@ -91,7 +91,7 @@
 <dialog id="settingsModal" class="modal">
   <form method="dialog" class="modal-card">
     <h2 class="modal-title">Telegram sync</h2>
-    <p class="modal-hint">Data syncs to a pinned message in your Telegram chat so reminders and all devices stay in sync. Sync uses a small API proxy because browsers cannot call Telegram directly.</p>
+    <p class="modal-hint">Use your <strong>InternshipJobWatcherBot</strong> token (same as <code>.env</code>) for full sync and job highlights. Data syncs to a pinned Telegram message so reminders and all devices stay in sync.</p>
     <label class="field"><span>Bot token</span><input type="password" id="tgToken" placeholder="123456:ABC…" autocomplete="off"></label>
     <label class="field"><span>Chat ID</span><input type="text" id="tgChat" placeholder="6062137847" autocomplete="off"></label>
     <div class="modal-actions">
@@ -104,7 +104,7 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<script src="assets/app.js?v=6"></script>
+<script src="assets/app.js?v=7"></script>
 <script>App.initCalendar();</script>
 </body>
 </html>
