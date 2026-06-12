@@ -139,7 +139,10 @@ body {
 }
 .row .visit a:hover { color: var(--accent-hover); text-decoration: underline; }
 
-.row.applied { background: var(--bg); }
+.row.notified { background: var(--accent-soft); }
+.row.notified:hover { background: var(--accent-soft); }
+.row.notified .co { color: var(--accent); font-weight: 600; }
+
 .row.applied:hover { background: var(--bg); }
 .row.applied .co {
   color: var(--ink-faint);

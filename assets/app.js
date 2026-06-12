@@ -1,7 +1,7 @@
 /* Intern Tracker — shared app logic
    Data model (synced to a pinned Telegram message so the reminder
    cron + every device can see the same state):
-   { applied: { slug: epochMs }, deadlines: [{id, company, kind, date, time, notes}], updatedAt }
+   { applied: { slug: epochMs }, notified: { slug: epochMs }, deadlines: [...], updatedAt }
 */
 "use strict";
 
@@ -20,8 +20,13 @@ const App = (() => {
   function loadLocal() {
     try {
       const d = JSON.parse(localStorage.getItem(DATA_KEY)) || {};
-      return { applied: d.applied || {}, deadlines: d.deadlines || [], updatedAt: d.updatedAt || 0 };
-    } catch { return { applied: {}, deadlines: [], updatedAt: 0 }; }
+      return {
+        applied: d.applied || {},
+        notified: d.notified || {},
+        deadlines: d.deadlines || [],
+        updatedAt: d.updatedAt || 0,
+      };
+    } catch { return { applied: {}, notified: {}, deadlines: [], updatedAt: 0 }; }
   }
   function saveLocal() { localStorage.setItem(DATA_KEY, JSON.stringify(data)); }
 
@@ -77,7 +82,12 @@ const App = (() => {
         if (remote) {
           pinnedMsgId = pm.message_id;
           if ((remote.updatedAt || 0) > (data.updatedAt || 0)) {
-            data = { applied: remote.applied || {}, deadlines: remote.deadlines || [], updatedAt: remote.updatedAt };
+            data = {
+              applied: remote.applied || {},
+              notified: remote.notified || {},
+              deadlines: remote.deadlines || [],
+              updatedAt: remote.updatedAt,
+            };
             saveLocal();
             rerender();
           } else if ((data.updatedAt || 0) > (remote.updatedAt || 0)) {
@@ -202,9 +212,19 @@ const App = (() => {
       (!q || c.name.toLowerCase().includes(q)) && (!boardFilter.ats || c.ats === boardFilter.ats));
     const open = list.filter(c => !data.applied[c.slug]);
     const done = list.filter(c => data.applied[c.slug]);
+    open.sort((a, b) => {
+      const an = data.notified[a.slug] || 0;
+      const bn = data.notified[b.slug] || 0;
+      if (an && !bn) return -1;
+      if (!an && bn) return 1;
+      if (an && bn) return bn - an;
+      return a.name.localeCompare(b.name);
+    });
 
-    const row = (c, i) => `
-      <div class="row ${data.applied[c.slug] ? "applied" : ""}">
+    const row = (c, i) => {
+      const isNotified = !!(data.notified[c.slug] && !data.applied[c.slug]);
+      return `
+      <div class="row ${data.applied[c.slug] ? "applied" : ""} ${isNotified ? "notified" : ""}">
         <span class="idx">${String(i + 1).padStart(3, "0")}</span>
         <span class="co">${esc(c.name)}</span>
         <span class="ats"><span class="tag">${esc(c.ats)}</span></span>
@@ -215,6 +235,7 @@ const App = (() => {
           <span class="apply-label">Applied</span>
         </label>
       </div>`;
+    };
 
     let html = "";
     if (open.length) html += `<div class="board-section-label">Not applied (${open.length})</div>` + open.map(row).join("");
@@ -225,7 +246,14 @@ const App = (() => {
     board.querySelectorAll("input[data-slug]").forEach(cb => {
       cb.addEventListener("change", () => {
         const slug = cb.dataset.slug;
-        mutate(d => { cb.checked ? d.applied[slug] = Date.now() : delete d.applied[slug]; });
+        mutate(d => {
+          if (cb.checked) {
+            d.applied[slug] = Date.now();
+            delete d.notified[slug];
+          } else {
+            delete d.applied[slug];
+          }
+        });
         toast(cb.checked ? "Marked as applied" : "Moved back to open");
       });
     });
