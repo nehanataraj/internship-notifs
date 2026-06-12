@@ -3,47 +3,51 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Board — Internship Mission Control</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='80' font-size='80'>🛫</text></svg>">
+<title>Companies — Intern Diary</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='80' font-size='80'>💕</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-<div class="grain"></div>
+<div class="floaties" aria-hidden="true">
+  <span class="f f1">✨</span><span class="f f2">💕</span><span class="f f3">🎀</span>
+  <span class="f f4">✨</span><span class="f f5">💖</span><span class="f f6">🌸</span>
+  <span class="f f7">💫</span><span class="f f8">🎀</span>
+</div>
 
 <header class="masthead">
   <div class="masthead-inner">
     <div class="brand">
-      <span class="brand-mark">✦</span>
+      <span class="brand-mark">💕</span>
       <div>
-        <h1>Mission&nbsp;Control</h1>
-        <p class="brand-sub">internship application terminal</p>
+        <h1>Intern&nbsp;Diary</h1>
+        <p class="brand-sub">your cute little application tracker</p>
       </div>
     </div>
     <nav class="tabs">
-      <a href="index.html" class="tab active">The Board</a>
-      <a href="calendar.html" class="tab">Deadlines</a>
+      <a href="index.html" class="tab active">Companies</a>
+      <a href="calendar.html" class="tab">Calendar</a>
     </nav>
     <div class="header-right">
       <span class="sync-dot" id="syncDot" title="Sync status"></span>
-      <button class="icon-btn" id="settingsBtn" title="Telegram sync settings">⚙</button>
+      <button class="icon-btn" id="settingsBtn" title="Telegram sync">💌</button>
     </div>
   </div>
 </header>
 
 <main class="page">
   <section class="board-head">
-    <div class="departures-strip">
-      <span class="strip-label">Departures</span>
-      <span class="strip-divider"></span>
-      <span class="strip-sub">applications · live</span>
+    <div class="hero-strip">
+      <span class="strip-label">Dream&nbsp;List</span>
+      <span class="strip-sparkle">✨</span>
+      <span class="strip-sub">every company you're watching</span>
     </div>
     <div class="stats" id="stats"></div>
     <div class="board-controls">
-      <input type="search" id="searchBox" class="search" placeholder="search companies…" autocomplete="off">
-      <select id="atsFilter" class="ats-filter"><option value="">all systems</option></select>
+      <input type="search" id="searchBox" class="search" placeholder="search your dream companies…" autocomplete="off">
+      <select id="atsFilter" class="ats-filter"><option value="">all platforms</option></select>
     </div>
   </section>
 
@@ -51,19 +55,18 @@
 </main>
 
 <footer class="foot">
-  <span>fed by job_notifier · <span id="companyCount"></span> sources tracked</span>
+  <span>made with 💕 · <span id="companyCount"></span> companies tracked</span>
 </footer>
 
-<!-- Settings modal -->
 <dialog id="settingsModal" class="modal">
   <form method="dialog" class="modal-card">
-    <h2 class="modal-title">Telegram sync</h2>
-    <p class="modal-hint">Data lives in a pinned message in your Telegram chat, so the reminder bot and all your devices stay in sync.</p>
+    <h2 class="modal-title">Telegram sync 💌</h2>
+    <p class="modal-hint">Your progress syncs to a pinned message in Telegram — so your phone, laptop, and reminder bot all stay on the same page.</p>
     <label class="field"><span>Bot token</span><input type="password" id="tgToken" placeholder="123456:ABC…" autocomplete="off"></label>
     <label class="field"><span>Chat ID</span><input type="text" id="tgChat" placeholder="6062137847" autocomplete="off"></label>
     <div class="modal-actions">
-      <button type="button" class="btn ghost" id="testSyncBtn">Send test message</button>
-      <button type="submit" class="btn solid" id="saveSyncBtn">Save</button>
+      <button type="button" class="btn ghost" id="testSyncBtn">Send test 💌</button>
+      <button type="submit" class="btn solid" id="saveSyncBtn">Save ✨</button>
     </div>
     <p class="modal-status" id="syncStatusMsg"></p>
   </form>
