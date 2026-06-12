@@ -1,4 +1,4 @@
-/* Intern Diary — shared app logic
+/* Intern Tracker — shared app logic
    Data model (synced to a pinned Telegram message so the reminder
    cron + every device can see the same state):
    { applied: { slug: epochMs }, deadlines: [{id, company, kind, date, time, notes}], updatedAt }
@@ -38,7 +38,7 @@ const App = (() => {
       if (token && chat) {
         cfg = { token, chat };
         localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
-        toast("Telegram sync configured 💕");
+        toast("Telegram sync configured");
       }
     } catch { /* bad link, ignore */ }
     history.replaceState(null, "", location.pathname + location.search);
@@ -58,7 +58,7 @@ const App = (() => {
   }
 
   function encodeData() {
-    return "🗂 Internship tracker data — do not unpin or delete\n" + MARKER + JSON.stringify(data);
+    return "Internship tracker data — do not unpin or delete\n" + MARKER + JSON.stringify(data);
   }
   function decodeData(text) {
     const i = text.indexOf(MARKER);
@@ -140,7 +140,7 @@ const App = (() => {
     const dot = $("syncDot");
     if (!dot) return;
     dot.className = "sync-dot" + (state ? " " + state : "");
-    dot.title = { ok: "Synced with Telegram 💕", err: "Sync error — check settings", busy: "Syncing…", "": "Sync off — tap 💌" }[state] || "";
+    dot.title = { ok: "Synced with Telegram", err: "Sync error — check settings", busy: "Syncing…", "": "Sync off — open Settings" }[state] || "";
   }
 
   let toastTimer = null;
@@ -167,7 +167,7 @@ const App = (() => {
         cfg = { token, chat };
         localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
         pull();
-        toast("Saved! You're all synced ✨");
+        toast("Sync settings saved");
       }
     });
     $("testSyncBtn").addEventListener("click", async () => {
@@ -177,9 +177,9 @@ const App = (() => {
       status.textContent = "Sending…"; status.className = "modal-status";
       try {
         const saved = cfg; cfg = { token, chat };
-        await tg("sendMessage", { chat_id: chat, text: "💕 Intern Diary connected! I'll remind you 2 days before every OA & interview." });
+        await tg("sendMessage", { chat_id: chat, text: "Intern Tracker connected. Reminders will be sent 2 days before each OA and interview." });
         cfg = saved;
-        status.textContent = "Delivered — check your Telegram 💌"; status.className = "modal-status ok";
+        status.textContent = "Delivered — check Telegram."; status.className = "modal-status ok";
       } catch (e) {
         status.textContent = "Failed: " + e.message; status.className = "modal-status err";
       }
@@ -208,33 +208,33 @@ const App = (() => {
         <span class="idx">${String(i + 1).padStart(3, "0")}</span>
         <span class="co">${esc(c.name)}</span>
         <span class="ats">${esc(c.ats)}</span>
-        <span class="visit">${c.url ? `<a href="${esc(c.url)}" target="_blank" rel="noopener">peek →</a>` : ""}</span>
+        <span class="visit">${c.url ? `<a href="${esc(c.url)}" target="_blank" rel="noopener">View</a>` : ""}</span>
         <label class="apply-toggle">
           <input type="checkbox" data-slug="${c.slug}" ${data.applied[c.slug] ? "checked" : ""}>
-          <span class="apply-box">♥</span>
-          <span class="apply-label">applied</span>
+          <span class="apply-box">&#10003;</span>
+          <span class="apply-label">Applied</span>
         </label>
       </div>`;
 
     let html = "";
-    if (open.length) html += `<div class="board-section-label">Still manifesting ✨ (${open.length})</div>` + open.map(row).join("");
-    if (done.length) html += `<div class="board-section-label">Already applied 💅 (${done.length})</div>` + done.map(row).join("");
-    if (!html) html = `<div class="empty-msg">no matches — try a different search 🌸</div>`;
+    if (open.length) html += `<div class="board-section-label">Not applied (${open.length})</div>` + open.map(row).join("");
+    if (done.length) html += `<div class="board-section-label">Applied (${done.length})</div>` + done.map(row).join("");
+    if (!html) html = `<div class="empty-msg">No companies match that search.</div>`;
     board.innerHTML = html;
 
     board.querySelectorAll("input[data-slug]").forEach(cb => {
       cb.addEventListener("change", () => {
         const slug = cb.dataset.slug;
         mutate(d => { cb.checked ? d.applied[slug] = Date.now() : delete d.applied[slug]; });
-        toast(cb.checked ? "Applied! So proud of you 💕" : "Back on the dream list ✨");
+        toast(cb.checked ? "Marked as applied" : "Moved back to open");
       });
     });
 
     const total = companies.length, applied = Object.keys(data.applied).length;
     $("stats").innerHTML = `
-      <span>✨ <b>${total - applied}</b> to go</span>
-      <span class="stat-applied">💅 <b>${applied}</b> applied</span>
-      <span>🎀 <b>${total ? Math.round(applied / total * 100) : 0}%</b> done</span>`;
+      <span><b>${total - applied}</b> open</span>
+      <span class="stat-applied"><b>${applied}</b> applied</span>
+      <span><b>${total ? Math.round(applied / total * 100) : 0}%</b> complete</span>`;
     const cc = $("companyCount"); if (cc) cc.textContent = total;
   }
 
@@ -303,12 +303,12 @@ const App = (() => {
       (a.date + (a.time || "")) < (b.date + (b.time || "")) ? -1 : 1);
     const upcoming = evs.filter(e => e.date >= today);
     const past = evs.filter(e => e.date < today);
-    $("upcomingCount").textContent = `${upcoming.length} events coming up`;
+    $("upcomingCount").textContent = `${upcoming.length} upcoming`;
 
     const card = (ev, isPast) => {
       const d = parseYmd(ev.date);
       const days = Math.round((d - parseYmd(today)) / 86400000);
-      const cd = isPast ? "past ✓" : days === 0 ? "today!!" : days === 1 ? "tomorrow 💕" : `in ${days} days`;
+      const cd = isPast ? "Past" : days === 0 ? "Today" : days === 1 ? "Tomorrow" : `In ${days} days`;
       return `
         <div class="up-card ${isPast ? "past" : ""}">
           <div class="up-date"><div class="dd">${d.getDate()}</div><div class="mm">${MONTHS[d.getMonth()].slice(0, 3)}</div></div>
@@ -319,13 +319,13 @@ const App = (() => {
     };
 
     list.innerHTML =
-      (upcoming.map(e => card(e, false)).join("") || `<div class="empty-msg">nothing yet — tap a day to add something ✨</div>`) +
+      (upcoming.map(e => card(e, false)).join("") || `<div class="empty-msg">No events scheduled. Click a day to add one.</div>`) +
       past.slice(-3).reverse().map(e => card(e, true)).join("");
 
     list.querySelectorAll(".del").forEach(btn =>
       btn.addEventListener("click", () => {
         mutate(d => { d.deadlines = d.deadlines.filter(e => e.id !== btn.dataset.id); });
-        toast("Removed from calendar 🌸");
+        toast("Event removed");
       }));
   }
 
@@ -365,12 +365,12 @@ const App = (() => {
       if (!ev.company || !ev.date) return;
       mutate(d => d.deadlines.push(ev));
       $("eventModal").close();
-      toast(`${ev.company} saved! I'll remind you 2 days before 💌`);
+      toast(`${ev.company} added — reminder in 2 days`);
       if (cfg) {
         const d = parseYmd(ev.date);
         tg("sendMessage", {
           chat_id: cfg.chat,
-          text: `💕 Saved: ${ev.company} — ${ev.kind} on ${MONTHS[d.getMonth()].slice(0, 3)} ${d.getDate()}${ev.time ? " at " + ev.time : ""}${ev.notes ? "\n" + ev.notes : ""}\nI'll remind you 2 days before!`,
+          text: `Scheduled: ${ev.company} — ${ev.kind} on ${MONTHS[d.getMonth()].slice(0, 3)} ${d.getDate()}${ev.time ? " at " + ev.time : ""}${ev.notes ? "\n" + ev.notes : ""}\nReminder in 2 days.`,
           disable_notification: true,
         }).catch(() => {});
       }

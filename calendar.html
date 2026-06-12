@@ -3,27 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calendar — Intern Diary</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='80' font-size='80'>💕</text></svg>">
+<title>Calendar — Intern Tracker</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%232563eb'/><text x='16' y='22' text-anchor='middle' fill='white' font-size='14' font-family='sans-serif'>IT</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
-<div class="floaties" aria-hidden="true">
-  <span class="f f1">✨</span><span class="f f2">💕</span><span class="f f3">🎀</span>
-  <span class="f f4">✨</span><span class="f f5">💖</span><span class="f f6">🌸</span>
-  <span class="f f7">💫</span><span class="f f8">🎀</span>
-</div>
 
 <header class="masthead">
   <div class="masthead-inner">
     <div class="brand">
-      <span class="brand-mark">💕</span>
       <div>
-        <h1>Intern&nbsp;Diary</h1>
-        <p class="brand-sub">your cute little application tracker</p>
+        <h1>Intern Tracker</h1>
+        <p class="brand-sub">application progress</p>
       </div>
     </div>
     <nav class="tabs">
@@ -32,7 +26,7 @@
     </nav>
     <div class="header-right">
       <span class="sync-dot" id="syncDot" title="Sync status"></span>
-      <button class="icon-btn" id="settingsBtn" title="Telegram sync">💌</button>
+      <button class="icon-btn" id="settingsBtn" title="Telegram sync">Settings</button>
     </div>
   </div>
 </header>
@@ -43,35 +37,34 @@
       <button class="icon-btn nav-arrow" id="prevMonth">‹</button>
       <h2 class="cal-title" id="calTitle"></h2>
       <button class="icon-btn nav-arrow" id="nextMonth">›</button>
-      <button class="btn ghost small" id="todayBtn">today ✨</button>
-      <button class="btn solid small" id="addBtn">+ add event</button>
+      <button class="btn ghost small" id="todayBtn">Today</button>
+      <button class="btn solid small" id="addBtn">Add event</button>
     </div>
     <div class="cal-grid-head">
       <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
     </div>
     <div class="cal-grid" id="calGrid"></div>
-    <p class="cal-note">💌 I'll text you on Telegram <em>2 days before</em> every OA & interview (~9:20 AM ET)</p>
+    <p class="cal-note">Telegram reminders are sent <em>2 days before</em> each event, daily at ~9:20 AM ET.</p>
   </section>
 
   <aside class="upcoming">
-    <div class="hero-strip compact">
-      <span class="strip-label">Coming&nbsp;Up</span>
-      <span class="strip-sparkle">🎀</span>
-      <span class="strip-sub" id="upcomingCount"></span>
+    <div class="page-title compact">
+      <h2 class="strip-label">Upcoming</h2>
+      <p class="strip-sub" id="upcomingCount"></p>
     </div>
     <div class="upcoming-list" id="upcomingList"></div>
   </aside>
 </main>
 
 <footer class="foot">
-  <span>made with 💕 · reminders via telegram</span>
+  <span>Reminders via Telegram</span>
 </footer>
 
 <dialog id="eventModal" class="modal">
   <form class="modal-card" id="eventForm">
-    <h2 class="modal-title" id="eventModalTitle">New event ✨</h2>
+    <h2 class="modal-title" id="eventModalTitle">New event</h2>
     <label class="field"><span>Company</span>
-      <input type="text" id="evCompany" list="companyList" placeholder="which company?" required autocomplete="off">
+      <input type="text" id="evCompany" list="companyList" placeholder="Company name" required autocomplete="off">
       <datalist id="companyList"></datalist>
     </label>
     <div class="field-row">
@@ -86,23 +79,23 @@
       <label class="field"><span>Date</span><input type="date" id="evDate" required></label>
       <label class="field"><span>Time <em>(optional)</em></span><input type="time" id="evTime"></label>
     </div>
-    <label class="field"><span>Notes <em>(optional)</em></span><input type="text" id="evNotes" placeholder="codesignal, 70 min…" maxlength="120" autocomplete="off"></label>
+    <label class="field"><span>Notes <em>(optional)</em></span><input type="text" id="evNotes" placeholder="e.g. CodeSignal, 70 min" maxlength="120" autocomplete="off"></label>
     <div class="modal-actions">
-      <button type="button" class="btn ghost" id="cancelEventBtn">nevermind</button>
-      <button type="submit" class="btn solid">save it 💕</button>
+      <button type="button" class="btn ghost" id="cancelEventBtn">Cancel</button>
+      <button type="submit" class="btn solid">Save</button>
     </div>
   </form>
 </dialog>
 
 <dialog id="settingsModal" class="modal">
   <form method="dialog" class="modal-card">
-    <h2 class="modal-title">Telegram sync 💌</h2>
-    <p class="modal-hint">Your progress syncs to a pinned message in Telegram — so your phone, laptop, and reminder bot all stay on the same page.</p>
+    <h2 class="modal-title">Telegram sync</h2>
+    <p class="modal-hint">Data syncs to a pinned message in your Telegram chat so reminders and all devices stay in sync.</p>
     <label class="field"><span>Bot token</span><input type="password" id="tgToken" placeholder="123456:ABC…" autocomplete="off"></label>
     <label class="field"><span>Chat ID</span><input type="text" id="tgChat" placeholder="6062137847" autocomplete="off"></label>
     <div class="modal-actions">
-      <button type="button" class="btn ghost" id="testSyncBtn">Send test 💌</button>
-      <button type="submit" class="btn solid" id="saveSyncBtn">Save ✨</button>
+      <button type="button" class="btn ghost" id="testSyncBtn">Send test</button>
+      <button type="submit" class="btn solid" id="saveSyncBtn">Save</button>
     </div>
     <p class="modal-status" id="syncStatusMsg"></p>
   </form>

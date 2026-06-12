@@ -61,7 +61,7 @@ def main() -> int:
         print(f"{len(deadlines)} deadlines tracked; none due in {REMIND_DAYS} days.")
         return 0
 
-    lines = [f"⏰ Heads up — due in {REMIND_DAYS} days:"]
+    lines = [f"Reminder — due in {REMIND_DAYS} days:"]
     for ev in sorted(due, key=lambda e: (e.get("time") or "99:99")):
         d = date.fromisoformat(ev["date"])
         when = d.strftime("%a, %b %d")
