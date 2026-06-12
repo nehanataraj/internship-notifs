@@ -227,10 +227,12 @@ const App = (() => {
       if (!token || !chat) { status.textContent = "Enter both fields first."; status.className = "modal-status err"; return; }
       status.textContent = "Sending…"; status.className = "modal-status";
       try {
-        const saved = cfg; cfg = { token, chat };
+        cfg = { token, chat };
         await tg("sendMessage", { chat_id: chat, text: "Intern Tracker connected. Reminders will be sent 2 days before each OA and interview." });
-        cfg = saved;
-        status.textContent = "Delivered — check Telegram."; status.className = "modal-status ok";
+        localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
+        status.textContent = "Delivered — check Telegram. Settings saved."; status.className = "modal-status ok";
+        await pull();
+        toast("Sync settings saved");
       } catch (e) {
         status.textContent = "Failed: " + e.message; status.className = "modal-status err";
       }

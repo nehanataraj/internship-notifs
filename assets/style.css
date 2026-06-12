@@ -67,7 +67,7 @@ body {
   width: 8px; height: 8px; border-radius: var(--radius-pill);
   background: var(--ink-faint); transition: background 150ms ease-out;
 }
-.sync-dot.ok { background: var(--accent); }
+.sync-dot.ok { background: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
 .sync-dot.err { background: var(--accent-hover); }
 .sync-dot.busy { background: var(--ink-soft); }
 
