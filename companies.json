@@ -1,0 +1,1028 @@
+[
+ {
+  "slug": "accenture",
+  "name": "Accenture",
+  "ats": "Workday",
+  "url": "https://accenture.wd103.myworkdayjobs.com/AccentureCareers"
+ },
+ {
+  "slug": "activision-blizzard",
+  "name": "Activision Blizzard",
+  "ats": "Phenom",
+  "url": "https://careers.activisionblizzard.com/global/en/search-results"
+ },
+ {
+  "slug": "adobe",
+  "name": "Adobe",
+  "ats": "Workday",
+  "url": "https://adobe.wd5.myworkdayjobs.com/external_experienced"
+ },
+ {
+  "slug": "affirm",
+  "name": "Affirm",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/affirm"
+ },
+ {
+  "slug": "airbnb",
+  "name": "Airbnb",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/airbnb"
+ },
+ {
+  "slug": "airtable",
+  "name": "Airtable",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/airtable"
+ },
+ {
+  "slug": "akuna-capital",
+  "name": "Akuna Capital",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/akunacapital"
+ },
+ {
+  "slug": "amazon",
+  "name": "Amazon",
+  "ats": "Amazon Jobs",
+  "url": "https://www.amazon.jobs/en/search?base_query=intern"
+ },
+ {
+  "slug": "amd",
+  "name": "AMD",
+  "ats": "Direct site",
+  "url": "https://careers.amd.com/careers-home/jobs"
+ },
+ {
+  "slug": "amplitude",
+  "name": "Amplitude",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/amplitude"
+ },
+ {
+  "slug": "anduril",
+  "name": "Anduril",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/andurilindustries"
+ },
+ {
+  "slug": "anthropic",
+  "name": "Anthropic",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/anthropic"
+ },
+ {
+  "slug": "anyscale",
+  "name": "Anyscale",
+  "ats": "Ashby",
+  "url": "https://jobs.ashbyhq.com/anyscale"
+ },
+ {
+  "slug": "apple",
+  "name": "Apple",
+  "ats": "Direct site",
+  "url": "https://jobs.apple.com/en-us/search?search=intern"
+ },
+ {
+  "slug": "asana",
+  "name": "Asana",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/asana"
+ },
+ {
+  "slug": "at-t-tech",
+  "name": "AT&T (Tech)",
+  "ats": "Workday",
+  "url": "https://att.wd1.myworkdayjobs.com/ATTGeneral"
+ },
+ {
+  "slug": "bae-systems",
+  "name": "BAE Systems",
+  "ats": "Phenom",
+  "url": "https://jobs.baesystems.com/global/en/search-results"
+ },
+ {
+  "slug": "bain-company",
+  "name": "Bain & Company",
+  "ats": "Direct site",
+  "url": "https://www.bain.com/careers/find-a-role/?q=intern"
+ },
+ {
+  "slug": "bank-of-america",
+  "name": "Bank of America",
+  "ats": "Direct site",
+  "url": "https://careers.bankofamerica.com/en-us/job-search?searchKeyword=intern"
+ },
+ {
+  "slug": "barclays",
+  "name": "Barclays",
+  "ats": "Workday",
+  "url": "https://barclays.wd3.myworkdayjobs.com/External_Career_Site_Barclays"
+ },
+ {
+  "slug": "bcg",
+  "name": "BCG",
+  "ats": "Phenom",
+  "url": "https://careers.bcg.com/global/en/search-results"
+ },
+ {
+  "slug": "blackrock",
+  "name": "BlackRock",
+  "ats": "Workday",
+  "url": "https://blackrock.wd1.myworkdayjobs.com/BlackRock_Professional"
+ },
+ {
+  "slug": "boeing",
+  "name": "Boeing",
+  "ats": "Workday",
+  "url": "https://boeing.wd1.myworkdayjobs.com/EXTERNAL_CAREERS"
+ },
+ {
+  "slug": "booz-allen-hamilton",
+  "name": "Booz Allen Hamilton",
+  "ats": "Workday",
+  "url": "https://bah.wd1.myworkdayjobs.com/BAH_Jobs"
+ },
+ {
+  "slug": "boston-dynamics",
+  "name": "Boston Dynamics",
+  "ats": "Workday",
+  "url": "https://bostondynamics.wd1.myworkdayjobs.com/Boston_Dynamics"
+ },
+ {
+  "slug": "box",
+  "name": "Box",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/boxinc"
+ },
+ {
+  "slug": "braze",
+  "name": "Braze",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/braze"
+ },
+ {
+  "slug": "brex",
+  "name": "Brex",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/brex"
+ },
+ {
+  "slug": "bytedance-tiktok",
+  "name": "ByteDance / TikTok",
+  "ats": "SmartRecruiters",
+  "url": "https://careers.smartrecruiters.com/bytedance"
+ },
+ {
+  "slug": "capital-one",
+  "name": "Capital One",
+  "ats": "Workday",
+  "url": "https://capitalone.wd12.myworkdayjobs.com/Capital_One"
+ },
+ {
+  "slug": "cardlytics",
+  "name": "Cardlytics",
+  "ats": "Workday",
+  "url": "https://cardlytics.wd5.myworkdayjobs.com/CardlyticsExternalCareerSite"
+ },
+ {
+  "slug": "carta",
+  "name": "Carta",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/carta"
+ },
+ {
+  "slug": "chick-fil-a-digital",
+  "name": "Chick-fil-A (Digital)",
+  "ats": "Direct site",
+  "url": "https://careers.chick-fil-a.com/corporate/jobs"
+ },
+ {
+  "slug": "chime",
+  "name": "Chime",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/chime"
+ },
+ {
+  "slug": "cisco",
+  "name": "Cisco",
+  "ats": "Phenom",
+  "url": "https://careers.cisco.com/global/en/search-results"
+ },
+ {
+  "slug": "citi",
+  "name": "Citi",
+  "ats": "Phenom CSX",
+  "url": "https://citi.eightfold.ai"
+ },
+ {
+  "slug": "cloudflare",
+  "name": "Cloudflare",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/cloudflare"
+ },
+ {
+  "slug": "codeium-windsurf",
+  "name": "Codeium / Windsurf",
+  "ats": "Ashby",
+  "url": "https://jobs.ashbyhq.com/cognition"
+ },
+ {
+  "slug": "cohere",
+  "name": "Cohere",
+  "ats": "Ashby",
+  "url": "https://jobs.ashbyhq.com/cohere"
+ },
+ {
+  "slug": "coinbase",
+  "name": "Coinbase",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/coinbase"
+ },
+ {
+  "slug": "comcast-tech",
+  "name": "Comcast (Tech)",
+  "ats": "Workday",
+  "url": "https://comcast.wd5.myworkdayjobs.com/Comcast_Careers"
+ },
+ {
+  "slug": "confluent",
+  "name": "Confluent",
+  "ats": "Ashby",
+  "url": "https://jobs.ashbyhq.com/confluent"
+ },
+ {
+  "slug": "crowdstrike",
+  "name": "CrowdStrike",
+  "ats": "Workday",
+  "url": "https://crowdstrike.wd5.myworkdayjobs.com/crowdstrikecareers"
+ },
+ {
+  "slug": "cursor-anysphere",
+  "name": "Cursor / Anysphere",
+  "ats": "Ashby",
+  "url": "https://jobs.ashbyhq.com/cursor"
+ },
+ {
+  "slug": "databricks",
+  "name": "Databricks",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/databricks"
+ },
+ {
+  "slug": "datadog",
+  "name": "Datadog",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/datadog"
+ },
+ {
+  "slug": "dell-technologies",
+  "name": "Dell Technologies",
+  "ats": "Oracle HCM",
+  "url": "https://iawmqy.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/careers"
+ },
+ {
+  "slug": "deloitte",
+  "name": "Deloitte",
+  "ats": "Avature",
+  "url": "https://apply.deloitte.com"
+ },
+ {
+  "slug": "delta-air-lines",
+  "name": "Delta Air Lines",
+  "ats": "Direct site",
+  "url": "https://delta.avature.net/en_US/careers/SearchJobs?keywords=intern"
+ },
+ {
+  "slug": "disney-tech",
+  "name": "Disney (Tech)",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/disney"
+ },
+ {
+  "slug": "doordash",
+  "name": "DoorDash",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/doordashusa"
+ },
+ {
+  "slug": "dropbox",
+  "name": "Dropbox",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/dropbox"
+ },
+ {
+  "slug": "duolingo",
+  "name": "Duolingo",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/duolingo"
+ },
+ {
+  "slug": "ebay",
+  "name": "eBay",
+  "ats": "Workday",
+  "url": "https://ebay.wd5.myworkdayjobs.com/apply"
+ },
+ {
+  "slug": "elastic",
+  "name": "Elastic",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/elastic"
+ },
+ {
+  "slug": "electronic-arts-ea",
+  "name": "Electronic Arts (EA)",
+  "ats": "Avature",
+  "url": "https://jobs.ea.com"
+ },
+ {
+  "slug": "elevance-health",
+  "name": "Elevance Health",
+  "ats": "Workday",
+  "url": "https://elevancehealth.wd1.myworkdayjobs.com/ANT"
+ },
+ {
+  "slug": "epic-games",
+  "name": "Epic Games",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/epicgames"
+ },
+ {
+  "slug": "equifax",
+  "name": "Equifax",
+  "ats": "Workday",
+  "url": "https://equifax.wd5.myworkdayjobs.com/External"
+ },
+ {
+  "slug": "ey",
+  "name": "EY",
+  "ats": "SuccessFactors",
+  "url": "https://careers.ey.com"
+ },
+ {
+  "slug": "figma",
+  "name": "Figma",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/figma"
+ },
+ {
+  "slug": "fiserv",
+  "name": "Fiserv",
+  "ats": "Phenom",
+  "url": "https://careers.fiserv.com/us/en/search-results"
+ },
+ {
+  "slug": "glean",
+  "name": "Glean",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/gleanwork"
+ },
+ {
+  "slug": "global-payments",
+  "name": "Global Payments",
+  "ats": "Workday",
+  "url": "https://tsys.wd1.myworkdayjobs.com/TSYS"
+ },
+ {
+  "slug": "goldman-sachs",
+  "name": "Goldman Sachs",
+  "ats": "Oracle HCM",
+  "url": "https://hdpc.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_2001"
+ },
+ {
+  "slug": "google",
+  "name": "Google",
+  "ats": "Direct site",
+  "url": "https://www.google.com/about/careers/applications/jobs/results/?q=intern"
+ },
+ {
+  "slug": "gusto",
+  "name": "Gusto",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/gusto"
+ },
+ {
+  "slug": "harvey-ai",
+  "name": "Harvey AI",
+  "ats": "Ashby",
+  "url": "https://jobs.ashbyhq.com/harvey"
+ },
+ {
+  "slug": "hrt",
+  "name": "HRT",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/hrttalentcommunity"
+ },
+ {
+  "slug": "hubspot",
+  "name": "HubSpot",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/hubspotjobs"
+ },
+ {
+  "slug": "hugging-face",
+  "name": "Hugging Face",
+  "ats": "Workable",
+  "url": "https://apply.workable.com/huggingface"
+ },
+ {
+  "slug": "instacart",
+  "name": "Instacart",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/instacart"
+ },
+ {
+  "slug": "intel",
+  "name": "Intel",
+  "ats": "Workday",
+  "url": "https://intel.wd1.myworkdayjobs.com/External"
+ },
+ {
+  "slug": "intercom",
+  "name": "Intercom",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/intercom"
+ },
+ {
+  "slug": "intercontinental-exchange-ice",
+  "name": "Intercontinental Exchange (ICE)",
+  "ats": "Direct site",
+  "url": "https://careers.ice.com/jobs"
+ },
+ {
+  "slug": "intrinsic",
+  "name": "Intrinsic",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/intrinsicrobotics"
+ },
+ {
+  "slug": "isomorphic-labs",
+  "name": "Isomorphic Labs",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/isomorphiclabs"
+ },
+ {
+  "slug": "jane-street",
+  "name": "Jane Street",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/janestreet"
+ },
+ {
+  "slug": "jpmorgan-chase",
+  "name": "JPMorgan Chase",
+  "ats": "Oracle HCM",
+  "url": "https://jpmc.fa.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1001"
+ },
+ {
+  "slug": "jump-trading",
+  "name": "Jump Trading",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/jumptrading"
+ },
+ {
+  "slug": "lattice",
+  "name": "Lattice",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/lattice"
+ },
+ {
+  "slug": "leidos",
+  "name": "Leidos",
+  "ats": "Workday",
+  "url": "https://leidos.wd5.myworkdayjobs.com/External"
+ },
+ {
+  "slug": "linear",
+  "name": "Linear",
+  "ats": "Ashby",
+  "url": "https://jobs.ashbyhq.com/linear"
+ },
+ {
+  "slug": "linkedin",
+  "name": "LinkedIn",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/linkedin"
+ },
+ {
+  "slug": "lockheed-martin",
+  "name": "Lockheed Martin",
+  "ats": "Direct site",
+  "url": "https://www.lockheedmartinjobs.com/search-jobs?k=intern"
+ },
+ {
+  "slug": "lyft",
+  "name": "Lyft",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/lyft"
+ },
+ {
+  "slug": "manhattan-associates",
+  "name": "Manhattan Associates",
+  "ats": "Workday",
+  "url": "https://manh.wd5.myworkdayjobs.com/External"
+ },
+ {
+  "slug": "mastercard",
+  "name": "Mastercard",
+  "ats": "Workday",
+  "url": "https://mastercard.wd1.myworkdayjobs.com/CorporateCareers"
+ },
+ {
+  "slug": "mckinsey-company",
+  "name": "McKinsey & Company",
+  "ats": "Direct site",
+  "url": "https://www.mckinsey.com/careers/search-jobs?q=intern"
+ },
+ {
+  "slug": "meta",
+  "name": "Meta",
+  "ats": "Direct site",
+  "url": "https://www.metacareers.com/jobs?q=intern"
+ },
+ {
+  "slug": "microsoft",
+  "name": "Microsoft",
+  "ats": "Phenom CSX",
+  "url": "https://apply.careers.microsoft.com"
+ },
+ {
+  "slug": "mistral-ai",
+  "name": "Mistral AI",
+  "ats": "Ashby",
+  "url": "https://jobs.ashbyhq.com/mistral"
+ },
+ {
+  "slug": "mixpanel",
+  "name": "Mixpanel",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/mixpanel"
+ },
+ {
+  "slug": "modal",
+  "name": "Modal",
+  "ats": "Ashby",
+  "url": "https://jobs.ashbyhq.com/modal"
+ },
+ {
+  "slug": "mongodb",
+  "name": "MongoDB",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/mongodb"
+ },
+ {
+  "slug": "morgan-stanley",
+  "name": "Morgan Stanley",
+  "ats": "Phenom CSX",
+  "url": "https://morganstanley.eightfold.ai"
+ },
+ {
+  "slug": "nasa",
+  "name": "NASA",
+  "ats": "USAJobs",
+  "url": "https://www.usajobs.gov/Search/Results?k=intern"
+ },
+ {
+  "slug": "ncr-voyix",
+  "name": "NCR Voyix",
+  "ats": "Workday",
+  "url": "https://ncr.wd1.myworkdayjobs.com/ext_apac"
+ },
+ {
+  "slug": "netflix",
+  "name": "Netflix",
+  "ats": "Phenom CSX",
+  "url": "https://explore.jobs.netflix.net"
+ },
+ {
+  "slug": "neuralink",
+  "name": "Neuralink",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/neuralink"
+ },
+ {
+  "slug": "nike-tech",
+  "name": "Nike (Tech)",
+  "ats": "Workday",
+  "url": "https://nike.wd1.myworkdayjobs.com/nke"
+ },
+ {
+  "slug": "northrop-grumman",
+  "name": "Northrop Grumman",
+  "ats": "Workday",
+  "url": "https://ngc.wd1.myworkdayjobs.com/Northrop_Grumman_External_Site"
+ },
+ {
+  "slug": "notion",
+  "name": "Notion",
+  "ats": "Ashby",
+  "url": "https://jobs.ashbyhq.com/notion"
+ },
+ {
+  "slug": "nuro",
+  "name": "Nuro",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/nuro"
+ },
+ {
+  "slug": "nvidia",
+  "name": "NVIDIA",
+  "ats": "Workday",
+  "url": "https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite"
+ },
+ {
+  "slug": "okta",
+  "name": "Okta",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/okta"
+ },
+ {
+  "slug": "oliver-wyman",
+  "name": "Oliver Wyman",
+  "ats": "Lever",
+  "url": "https://jobs.lever.co/oliverwyman"
+ },
+ {
+  "slug": "openai",
+  "name": "OpenAI",
+  "ats": "Ashby",
+  "url": "https://jobs.ashbyhq.com/openai"
+ },
+ {
+  "slug": "optiver",
+  "name": "Optiver",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/optiverus"
+ },
+ {
+  "slug": "oracle",
+  "name": "Oracle",
+  "ats": "Oracle HCM",
+  "url": "https://eeho.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_45001"
+ },
+ {
+  "slug": "pagerduty",
+  "name": "PagerDuty",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/pagerduty"
+ },
+ {
+  "slug": "palantir",
+  "name": "Palantir",
+  "ats": "Lever",
+  "url": "https://jobs.lever.co/palantir"
+ },
+ {
+  "slug": "palo-alto-networks",
+  "name": "Palo Alto Networks",
+  "ats": "Workday",
+  "url": "https://paloaltonetworks.wd5.myworkdayjobs.com/panwexternalcareers"
+ },
+ {
+  "slug": "paypal",
+  "name": "PayPal",
+  "ats": "Workday",
+  "url": "https://paypal.wd1.myworkdayjobs.com/jobs"
+ },
+ {
+  "slug": "perplexity-ai",
+  "name": "Perplexity AI",
+  "ats": "Ashby",
+  "url": "https://jobs.ashbyhq.com/perplexity"
+ },
+ {
+  "slug": "pinterest",
+  "name": "Pinterest",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/pinterest"
+ },
+ {
+  "slug": "plaid",
+  "name": "Plaid",
+  "ats": "Ashby",
+  "url": "https://jobs.ashbyhq.com/plaid"
+ },
+ {
+  "slug": "point72",
+  "name": "Point72",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/point72"
+ },
+ {
+  "slug": "pwc",
+  "name": "PwC",
+  "ats": "Workday",
+  "url": "https://pwc.wd3.myworkdayjobs.com/Global_Experienced_Careers"
+ },
+ {
+  "slug": "qualcomm",
+  "name": "Qualcomm",
+  "ats": "Phenom CSX",
+  "url": "https://careers.qualcomm.com"
+ },
+ {
+  "slug": "ramp",
+  "name": "Ramp",
+  "ats": "Ashby",
+  "url": "https://jobs.ashbyhq.com/ramp"
+ },
+ {
+  "slug": "raytheon-rtx",
+  "name": "Raytheon (RTX)",
+  "ats": "SmartRecruiters",
+  "url": "https://careers.smartrecruiters.com/raytheontechnologies"
+ },
+ {
+  "slug": "reddit",
+  "name": "Reddit",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/reddit"
+ },
+ {
+  "slug": "replit",
+  "name": "Replit",
+  "ats": "Ashby",
+  "url": "https://jobs.ashbyhq.com/replit"
+ },
+ {
+  "slug": "riot-games",
+  "name": "Riot Games",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/riotgames"
+ },
+ {
+  "slug": "rippling",
+  "name": "Rippling",
+  "ats": "Direct site",
+  "url": "https://www.rippling.com/careers/open-roles"
+ },
+ {
+  "slug": "robinhood",
+  "name": "Robinhood",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/robinhood"
+ },
+ {
+  "slug": "roblox",
+  "name": "Roblox",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/roblox"
+ },
+ {
+  "slug": "roku",
+  "name": "Roku",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/roku"
+ },
+ {
+  "slug": "rubrik",
+  "name": "Rubrik",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/rubrik"
+ },
+ {
+  "slug": "salesforce",
+  "name": "Salesforce",
+  "ats": "Workday",
+  "url": "https://salesforce.wd12.myworkdayjobs.com/External_Career_Site"
+ },
+ {
+  "slug": "samsara",
+  "name": "Samsara",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/samsara"
+ },
+ {
+  "slug": "sap",
+  "name": "SAP",
+  "ats": "SuccessFactors",
+  "url": "https://jobs.sap.com"
+ },
+ {
+  "slug": "scale-ai",
+  "name": "Scale AI",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/scaleai"
+ },
+ {
+  "slug": "servicenow",
+  "name": "ServiceNow",
+  "ats": "SmartRecruiters",
+  "url": "https://careers.smartrecruiters.com/servicenow"
+ },
+ {
+  "slug": "shopify",
+  "name": "Shopify",
+  "ats": "Direct site",
+  "url": "https://www.shopify.com/careers/search?query=intern"
+ },
+ {
+  "slug": "snap",
+  "name": "Snap",
+  "ats": "Workday",
+  "url": "https://snapchat.wd1.myworkdayjobs.com/Snap"
+ },
+ {
+  "slug": "snowflake",
+  "name": "Snowflake",
+  "ats": "Ashby",
+  "url": "https://jobs.ashbyhq.com/snowflake"
+ },
+ {
+  "slug": "spacex",
+  "name": "SpaceX",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/spacex"
+ },
+ {
+  "slug": "splunk",
+  "name": "Splunk",
+  "ats": "Phenom",
+  "url": "https://careers.cisco.com/global/en/splunk"
+ },
+ {
+  "slug": "spotify",
+  "name": "Spotify",
+  "ats": "Lever",
+  "url": "https://jobs.lever.co/spotify"
+ },
+ {
+  "slug": "squarespace",
+  "name": "Squarespace",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/squarespace"
+ },
+ {
+  "slug": "ss-c-technologies",
+  "name": "SS&C Technologies",
+  "ats": "Workday",
+  "url": "https://ssctech.wd1.myworkdayjobs.com/SSCTechnologies"
+ },
+ {
+  "slug": "stripe",
+  "name": "Stripe",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/stripe"
+ },
+ {
+  "slug": "supabase",
+  "name": "Supabase",
+  "ats": "Ashby",
+  "url": "https://jobs.ashbyhq.com/supabase"
+ },
+ {
+  "slug": "t-mobile-tech",
+  "name": "T-Mobile (Tech)",
+  "ats": "Workday",
+  "url": "https://tmobile.wd1.myworkdayjobs.com/External"
+ },
+ {
+  "slug": "take-two-interactive",
+  "name": "Take-Two Interactive",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/2k"
+ },
+ {
+  "slug": "tesla",
+  "name": "Tesla",
+  "ats": "Direct site",
+  "url": "https://www.tesla.com/careers/search?query=intern"
+ },
+ {
+  "slug": "the-home-depot",
+  "name": "The Home Depot",
+  "ats": "Workday",
+  "url": "https://homedepot.wd5.myworkdayjobs.com/CareerDepot"
+ },
+ {
+  "slug": "twilio",
+  "name": "Twilio",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/twilio"
+ },
+ {
+  "slug": "twitter-x",
+  "name": "Twitter / X",
+  "ats": "SmartRecruiters",
+  "url": "https://careers.smartrecruiters.com/x"
+ },
+ {
+  "slug": "uber",
+  "name": "Uber",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/uberfreight"
+ },
+ {
+  "slug": "unity-technologies",
+  "name": "Unity Technologies",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/unity3d"
+ },
+ {
+  "slug": "ups-tech",
+  "name": "UPS (Tech)",
+  "ats": "Phenom",
+  "url": "https://www.jobs-ups.com/us/en/search-results"
+ },
+ {
+  "slug": "valve",
+  "name": "Valve",
+  "ats": "Direct site",
+  "url": "https://www.valvesoftware.com/en/jobs"
+ },
+ {
+  "slug": "vercel",
+  "name": "Vercel",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/vercel"
+ },
+ {
+  "slug": "verily",
+  "name": "Verily",
+  "ats": "Workday",
+  "url": "https://verily.wd1.myworkdayjobs.com/Verily_Careers"
+ },
+ {
+  "slug": "verkada",
+  "name": "Verkada",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/verkada"
+ },
+ {
+  "slug": "virtu-financial",
+  "name": "Virtu Financial",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/virtu"
+ },
+ {
+  "slug": "visa",
+  "name": "Visa",
+  "ats": "Workday",
+  "url": "https://visa.wd5.myworkdayjobs.com/Visa"
+ },
+ {
+  "slug": "warner-bros-discovery",
+  "name": "Warner Bros. Discovery",
+  "ats": "Phenom",
+  "url": "https://careers.wbd.com/global/en/search-results"
+ },
+ {
+  "slug": "waymo",
+  "name": "Waymo",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/waymo"
+ },
+ {
+  "slug": "wells-fargo",
+  "name": "Wells Fargo",
+  "ats": "Direct site",
+  "url": "https://www.wellsfargojobs.com/en/jobs/?q=intern"
+ },
+ {
+  "slug": "wing",
+  "name": "Wing",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/wing"
+ },
+ {
+  "slug": "workday",
+  "name": "Workday",
+  "ats": "Workday",
+  "url": "https://workday.wd5.myworkdayjobs.com/Workday"
+ },
+ {
+  "slug": "xai",
+  "name": "xAI",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/xai"
+ },
+ {
+  "slug": "yelp",
+  "name": "Yelp",
+  "ats": "Phenom",
+  "url": "https://www.yelp.careers/us/en/search-results"
+ },
+ {
+  "slug": "zendesk",
+  "name": "Zendesk",
+  "ats": "Workday",
+  "url": "https://zendesk.wd1.myworkdayjobs.com/zendesk"
+ },
+ {
+  "slug": "zoom",
+  "name": "Zoom",
+  "ats": "Workday",
+  "url": "https://zoom.wd5.myworkdayjobs.com/Zoom"
+ },
+ {
+  "slug": "zoox",
+  "name": "Zoox",
+  "ats": "Lever",
+  "url": "https://jobs.lever.co/zoox"
+ },
+ {
+  "slug": "zscaler",
+  "name": "Zscaler",
+  "ats": "Greenhouse",
+  "url": "https://boards.greenhouse.io/zscaler"
+ }
+]

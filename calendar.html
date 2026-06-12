@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deadlines — Internship Mission Control</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='80' font-size='80'>🛫</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="grain"></div>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="brand">
+      <span class="brand-mark">✦</span>
+      <div>
+        <h1>Mission&nbsp;Control</h1>
+        <p class="brand-sub">internship application terminal</p>
+      </div>
+    </div>
+    <nav class="tabs">
+      <a href="index.html" class="tab">The Board</a>
+      <a href="calendar.html" class="tab active">Deadlines</a>
+    </nav>
+    <div class="header-right">
+      <span class="sync-dot" id="syncDot" title="Sync status"></span>
+      <button class="icon-btn" id="settingsBtn" title="Telegram sync settings">⚙</button>
+    </div>
+  </div>
+</header>
+
+<main class="page cal-layout">
+  <section class="cal-panel">
+    <div class="cal-toolbar">
+      <button class="icon-btn nav-arrow" id="prevMonth">‹</button>
+      <h2 class="cal-title" id="calTitle"></h2>
+      <button class="icon-btn nav-arrow" id="nextMonth">›</button>
+      <button class="btn ghost small" id="todayBtn">today</button>
+      <button class="btn solid small" id="addBtn">+ deadline</button>
+    </div>
+    <div class="cal-grid-head">
+      <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+    <p class="cal-note">🔔 each deadline pings your Telegram <em>2 days before</em>, every morning at ~9:20 ET</p>
+  </section>
+
+  <aside class="upcoming">
+    <div class="departures-strip">
+      <span class="strip-label">Upcoming</span>
+      <span class="strip-divider"></span>
+      <span class="strip-sub" id="upcomingCount"></span>
+    </div>
+    <div class="upcoming-list" id="upcomingList"></div>
+  </aside>
+</main>
+
+<footer class="foot">
+  <span>fed by job_notifier · reminders via telegram</span>
+</footer>
+
+<!-- Add/edit deadline modal -->
+<dialog id="eventModal" class="modal">
+  <form class="modal-card" id="eventForm">
+    <h2 class="modal-title" id="eventModalTitle">New deadline</h2>
+    <label class="field"><span>Company</span>
+      <input type="text" id="evCompany" list="companyList" placeholder="start typing…" required autocomplete="off">
+      <datalist id="companyList"></datalist>
+    </label>
+    <div class="field-row">
+      <label class="field"><span>Type</span>
+        <select id="evKind">
+          <option value="OA">Online Assessment</option>
+          <option value="Interview">Interview</option>
+          <option value="Deadline">Application deadline</option>
+          <option value="Other">Other</option>
+        </select>
+      </label>
+      <label class="field"><span>Date</span><input type="date" id="evDate" required></label>
+      <label class="field"><span>Time <em>(opt)</em></span><input type="time" id="evTime"></label>
+    </div>
+    <label class="field"><span>Notes <em>(opt)</em></span><input type="text" id="evNotes" placeholder="codesignal, 70 min…" maxlength="120" autocomplete="off"></label>
+    <div class="modal-actions">
+      <button type="button" class="btn ghost" id="cancelEventBtn">Cancel</button>
+      <button type="submit" class="btn solid">Save deadline</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Settings modal -->
+<dialog id="settingsModal" class="modal">
+  <form method="dialog" class="modal-card">
+    <h2 class="modal-title">Telegram sync</h2>
+    <p class="modal-hint">Data lives in a pinned message in your Telegram chat, so the reminder bot and all your devices stay in sync.</p>
+    <label class="field"><span>Bot token</span><input type="password" id="tgToken" placeholder="123456:ABC…" autocomplete="off"></label>
+    <label class="field"><span>Chat ID</span><input type="text" id="tgChat" placeholder="6062137847" autocomplete="off"></label>
+    <div class="modal-actions">
+      <button type="button" class="btn ghost" id="testSyncBtn">Send test message</button>
+      <button type="submit" class="btn solid" id="saveSyncBtn">Save</button>
+    </div>
+    <p class="modal-status" id="syncStatusMsg"></p>
+  </form>
+</dialog>
+
+<div class="toast" id="toast"></div>
+
+<script src="assets/app.js"></script>
+<script>App.initCalendar();</script>
+</body>
+</html>

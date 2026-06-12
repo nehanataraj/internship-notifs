@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Board — Internship Mission Control</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='80' font-size='80'>🛫</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="grain"></div>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="brand">
+      <span class="brand-mark">✦</span>
+      <div>
+        <h1>Mission&nbsp;Control</h1>
+        <p class="brand-sub">internship application terminal</p>
+      </div>
+    </div>
+    <nav class="tabs">
+      <a href="index.html" class="tab active">The Board</a>
+      <a href="calendar.html" class="tab">Deadlines</a>
+    </nav>
+    <div class="header-right">
+      <span class="sync-dot" id="syncDot" title="Sync status"></span>
+      <button class="icon-btn" id="settingsBtn" title="Telegram sync settings">⚙</button>
+    </div>
+  </div>
+</header>
+
+<main class="page">
+  <section class="board-head">
+    <div class="departures-strip">
+      <span class="strip-label">Departures</span>
+      <span class="strip-divider"></span>
+      <span class="strip-sub">applications · live</span>
+    </div>
+    <div class="stats" id="stats"></div>
+    <div class="board-controls">
+      <input type="search" id="searchBox" class="search" placeholder="search companies…" autocomplete="off">
+      <select id="atsFilter" class="ats-filter"><option value="">all systems</option></select>
+    </div>
+  </section>
+
+  <section class="board" id="board" aria-live="polite"></section>
+</main>
+
+<footer class="foot">
+  <span>fed by job_notifier · <span id="companyCount"></span> sources tracked</span>
+</footer>
+
+<!-- Settings modal -->
+<dialog id="settingsModal" class="modal">
+  <form method="dialog" class="modal-card">
+    <h2 class="modal-title">Telegram sync</h2>
+    <p class="modal-hint">Data lives in a pinned message in your Telegram chat, so the reminder bot and all your devices stay in sync.</p>
+    <label class="field"><span>Bot token</span><input type="password" id="tgToken" placeholder="123456:ABC…" autocomplete="off"></label>
+    <label class="field"><span>Chat ID</span><input type="text" id="tgChat" placeholder="6062137847" autocomplete="off"></label>
+    <div class="modal-actions">
+      <button type="button" class="btn ghost" id="testSyncBtn">Send test message</button>
+      <button type="submit" class="btn solid" id="saveSyncBtn">Save</button>
+    </div>
+    <p class="modal-status" id="syncStatusMsg"></p>
+  </form>
+</dialog>
+
+<div class="toast" id="toast"></div>
+
+<script src="assets/app.js"></script>
+<script>App.initBoard();</script>
+</body>
+</html>
