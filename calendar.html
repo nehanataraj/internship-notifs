@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Calendar — Intern Tracker</title>
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%237a3545'/><text x='16' y='22' text-anchor='middle' fill='white' font-size='14' font-family='sans-serif'>IT</text></svg>">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23B0265C'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
@@ -17,16 +17,16 @@
     <div class="brand">
       <div>
         <h1>Intern Tracker</h1>
-        <p class="brand-sub">application progress</p>
+        <p class="brand-sub">Application progress</p>
       </div>
     </div>
-    <nav class="tabs">
+    <nav class="tabs" aria-label="Main">
       <a href="index.html" class="tab">Companies</a>
       <a href="calendar.html" class="tab active">Calendar</a>
     </nav>
     <div class="header-right">
-      <span class="sync-dot" id="syncDot" title="Sync status"></span>
-      <button class="icon-btn" id="settingsBtn" title="Telegram sync">Settings</button>
+      <span class="sync-dot" id="syncDot" title="Sync status" aria-hidden="true"></span>
+      <button type="button" class="btn ghost small" id="settingsBtn" title="Telegram sync">Settings</button>
     </div>
   </div>
 </header>
@@ -34,16 +34,17 @@
 <main class="page cal-layout">
   <section class="cal-panel">
     <div class="cal-toolbar">
-      <button class="icon-btn nav-arrow" id="prevMonth">‹</button>
+      <button type="button" class="nav-arrow" id="prevMonth" aria-label="Previous month">‹</button>
       <h2 class="cal-title" id="calTitle"></h2>
-      <button class="icon-btn nav-arrow" id="nextMonth">›</button>
-      <button class="btn ghost small" id="todayBtn">Today</button>
-      <button class="btn solid small" id="addBtn">Add event</button>
+      <button type="button" class="nav-arrow" id="nextMonth" aria-label="Next month">›</button>
+      <span class="spacer"></span>
+      <button type="button" class="btn ghost small" id="todayBtn">Today</button>
+      <button type="button" class="btn solid small" id="addBtn">Add event</button>
     </div>
-    <div class="cal-grid-head">
+    <div class="cal-grid-head" aria-hidden="true">
       <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
     </div>
-    <div class="cal-grid" id="calGrid"></div>
+    <div class="cal-grid" id="calGrid" role="grid" aria-label="Calendar"></div>
     <p class="cal-note">Telegram reminders are sent <em>2 days before</em> each event, daily at ~9:20 AM ET.</p>
   </section>
 
@@ -97,11 +98,11 @@
       <button type="button" class="btn ghost" id="testSyncBtn">Send test</button>
       <button type="submit" class="btn solid" id="saveSyncBtn">Save</button>
     </div>
-    <p class="modal-status" id="syncStatusMsg"></p>
+    <p class="modal-status" id="syncStatusMsg" role="status"></p>
   </form>
 </dialog>
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="assets/app.js"></script>
 <script>App.initCalendar();</script>

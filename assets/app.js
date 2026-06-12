@@ -204,14 +204,14 @@ const App = (() => {
     const done = list.filter(c => data.applied[c.slug]);
 
     const row = (c, i) => `
-      <div class="row ${data.applied[c.slug] ? "applied" : ""}" style="animation-delay:${Math.min(i * 12, 350)}ms">
+      <div class="row ${data.applied[c.slug] ? "applied" : ""}">
         <span class="idx">${String(i + 1).padStart(3, "0")}</span>
         <span class="co">${esc(c.name)}</span>
-        <span class="ats">${esc(c.ats)}</span>
+        <span class="ats"><span class="tag">${esc(c.ats)}</span></span>
         <span class="visit">${c.url ? `<a href="${esc(c.url)}" target="_blank" rel="noopener">View</a>` : ""}</span>
         <label class="apply-toggle">
-          <input type="checkbox" data-slug="${c.slug}" ${data.applied[c.slug] ? "checked" : ""}>
-          <span class="apply-box">&#10003;</span>
+          <input type="checkbox" data-slug="${c.slug}" ${data.applied[c.slug] ? "checked" : ""} aria-label="Applied to ${esc(c.name)}">
+          <span class="apply-box" aria-hidden="true">&#10003;</span>
           <span class="apply-label">Applied</span>
         </label>
       </div>`;
@@ -232,9 +232,9 @@ const App = (() => {
 
     const total = companies.length, applied = Object.keys(data.applied).length;
     $("stats").innerHTML = `
-      <span><b>${total - applied}</b> open</span>
-      <span class="stat-applied"><b>${applied}</b> applied</span>
-      <span><b>${total ? Math.round(applied / total * 100) : 0}%</b> complete</span>`;
+      <span class="stat"><span class="stat-val">${total - applied}</span>open</span>
+      <span class="stat"><span class="stat-val">${applied}</span>applied</span>
+      <span class="stat"><span class="stat-val">${total ? Math.round(applied / total * 100) : 0}%</span>complete</span>`;
     const cc = $("companyCount"); if (cc) cc.textContent = total;
   }
 
@@ -285,7 +285,7 @@ const App = (() => {
       html += `
         <div class="cal-day ${d.getMonth() !== m ? "other-month" : ""} ${ds === today ? "today" : ""}" data-date="${ds}">
           <span class="dnum">${d.getDate()}</span>
-          ${evs.map(ev => `<span class="chip ${ev.kind}" title="${esc(ev.company)} — ${ev.kind}${ev.notes ? " · " + esc(ev.notes) : ""}">${esc(ev.company)}</span>`).join("")}
+          ${evs.map(ev => `<span class="tag" title="${esc(ev.company)} — ${ev.kind}${ev.notes ? " · " + esc(ev.notes) : ""}">${esc(ev.company)}</span>`).join("")}
         </div>`;
     }
     grid.innerHTML = html;
@@ -313,8 +313,8 @@ const App = (() => {
         <div class="up-card ${isPast ? "past" : ""}">
           <div class="up-date"><div class="dd">${d.getDate()}</div><div class="mm">${MONTHS[d.getMonth()].slice(0, 3)}</div></div>
           <div class="up-co">${esc(ev.company)}</div>
-          <span class="countdown ${days <= 2 && !isPast ? "soon" : ""}">${cd}<br><button class="del" data-id="${ev.id}" title="delete">✕</button></span>
-          <div class="up-meta"><span class="kind ${ev.kind}">${ev.kind}</span>${ev.time ? " · " + ev.time : ""}${ev.notes ? " · " + esc(ev.notes) : ""}</div>
+          <span class="countdown ${days <= 2 && !isPast ? "soon" : ""}">${cd}<br><button type="button" class="del" data-id="${ev.id}" aria-label="Remove event">Remove</button></span>
+          <div class="up-meta"><span class="tag">${ev.kind}</span>${ev.time ? `<span>${ev.time}</span>` : ""}${ev.notes ? `<span>${esc(ev.notes)}</span>` : ""}</div>
         </div>`;
     };
 
