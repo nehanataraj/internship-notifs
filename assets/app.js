@@ -35,9 +35,7 @@ const App = (() => {
   }
 
   function boot() {
-    if ((localStorage.getItem("jt.proxy") || "").includes("internship-notifs.vercel.app")) {
-      localStorage.removeItem("jt.proxy");
-    }
+    localStorage.removeItem("jt.proxy");
   }
 
   /* magic link: #cfg=base64(token|chat) — saved once, then stripped from URL */
@@ -60,8 +58,6 @@ const App = (() => {
   /* ───────── telegram (via proxy — browsers cannot call api.telegram.org directly) ───────── */
   function proxyUrl() {
     if (location.hostname.endsWith(".vercel.app")) return "/api/telegram";
-    const override = localStorage.getItem("jt.proxy");
-    if (override && !override.includes("internship-notifs.vercel.app")) return override;
     return PROXY;
   }
 
