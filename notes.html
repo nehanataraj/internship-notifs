@@ -3,12 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Companies — Intern Tracker</title>
+<title>Notes — Intern Tracker</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23B0265C'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/style.css">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body>
 
@@ -21,9 +22,9 @@
       </div>
     </div>
     <nav class="tabs" aria-label="Main">
-      <a href="index.html" class="tab active">Companies</a>
+      <a href="index.html" class="tab">Companies</a>
       <a href="calendar.html" class="tab">Calendar</a>
-      <a href="notes.html" class="tab">Notes</a>
+      <a href="notes.html" class="tab active">Notes</a>
     </nav>
     <div class="header-right">
       <span class="sync-dot" id="syncDot" title="Sync status" aria-hidden="true"></span>
@@ -35,21 +36,38 @@
 <main class="page">
   <section class="board-head">
     <div class="page-title">
-      <h2 class="strip-label">Companies</h2>
-      <p class="strip-sub">Tracked internship sources</p>
+      <h2 class="strip-label">Notes</h2>
+      <p class="strip-sub">Markdown prep notes per company — synced via Telegram</p>
     </div>
-    <div class="stats" id="stats"></div>
-    <div class="board-controls">
-      <input type="search" id="searchBox" class="search" placeholder="Search companies…" autocomplete="off" aria-label="Search companies">
-      <select id="atsFilter" class="ats-filter" aria-label="Filter by platform"><option value="">All platforms</option></select>
+    <div class="notes-toolbar">
+      <label class="field notes-pick">
+        <span>Company</span>
+        <select id="notesCompany" aria-label="Select company"></select>
+      </label>
+      <div class="notes-actions">
+        <button type="button" class="btn ghost small" id="aiPolishBtn">Polish</button>
+        <button type="button" class="btn ghost small" id="aiExpandBtn">Expand</button>
+        <button type="button" class="btn ghost small" id="aiSummarizeBtn">Summarize</button>
+        <button type="button" class="btn solid small" id="notesSaveBtn">Save</button>
+      </div>
     </div>
+    <p class="notes-status" id="notesStatus" role="status"></p>
   </section>
 
-  <section class="board" id="board" aria-live="polite"></section>
+  <section class="md-editor">
+    <div class="md-pane">
+      <div class="md-pane-label">Markdown</div>
+      <textarea id="notesEditor" class="md-input" placeholder="# Prep notes&#10;&#10;- Why this company&#10;- Projects to mention&#10;- Questions for recruiter" spellcheck="true"></textarea>
+    </div>
+    <div class="md-pane">
+      <div class="md-pane-label">Preview</div>
+      <div id="notesPreview" class="md-preview prose"></div>
+    </div>
+  </section>
 </main>
 
 <footer class="foot">
-  <span><span id="companyCount"></span> companies tracked</span>
+  <span>Notes sync with your pinned Telegram message</span>
 </footer>
 
 <dialog id="settingsModal" class="modal">
@@ -69,6 +87,6 @@
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="assets/app.js?v=8"></script>
-<script>App.initBoard();</script>
+<script>App.initNotes();</script>
 </body>
 </html>

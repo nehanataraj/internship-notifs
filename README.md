@@ -6,6 +6,7 @@ Two-page companion app for the [Job_Notifier](https://github.com/nehanataraj/Job
 |------|-----|--------------|
 | **Companies** | [index.html](index.html) | All tracked companies — mark applied (grays out, moves to bottom); pink highlight when the watcher finds new jobs |
 | **Calendar** | [calendar.html](calendar.html) | OA / interview deadlines — Telegram reminder **2 days before** each one |
+| **Notes** | [notes.html](notes.html) | Per-company **markdown** prep notes with live preview + AI polish (OpenAI) |
 
 **Live app (recommended):** https://webapp-two-peach.vercel.app  
 **GitHub Pages mirror:** https://nehanataraj.github.io/internship-notifs/
@@ -89,7 +90,7 @@ GitHub Actions (remind.py, daily cron)
 
 ```
 Internship tracker data — do not unpin or delete
-JTRACK::{"applied":{},"notified":{},"deadlines":[],"updatedAt":0}
+JTRACK::{"applied":{},"notified":{},"notes":{},"deadlines":[],"updatedAt":0}
 ```
 
 ---
@@ -104,6 +105,44 @@ Repo → **Settings** → **Secrets and variables** → **Actions**:
 | `TELEGRAM_CHAT_ID` | Same chat id as `.env` |
 
 The daily workflow (`.github/workflows/remind.yml`) runs `remind.py` on a cron.
+
+---
+
+## OpenAI (Notes AI editing)
+
+The **Notes** tab uses GPT-4o-mini to polish, expand, or summarize markdown. The API key stays on the server — never in the browser or git.
+
+**Vercel** (Project → Settings → Environment Variables):
+
+| Variable | Value |
+|----------|-------|
+| `OPENAI_API_KEY` | Your OpenAI project key |
+
+Redeploy after adding. Local dev: copy `.env.example` to `.env` and run `npx vercel dev`.
+
+**Security:** If a key was ever pasted in chat or committed, rotate it at [platform.openai.com](https://platform.openai.com/api-keys).
+
+---
+
+## Embed on your website
+
+Add Intern Tracker as a feature on any site via link or iframe:
+
+```html
+<!-- Link -->
+<a href="https://webapp-two-peach.vercel.app/">Intern Tracker</a>
+
+<!-- Embedded (compact chrome) -->
+<iframe
+  src="https://webapp-two-peach.vercel.app/?embed=1"
+  title="Intern Tracker"
+  width="100%"
+  height="720"
+  style="border:1px solid #ECE4E8;border-radius:10px;max-width:1040px;"
+></iframe>
+```
+
+Point visitors to a specific tab: `index.html`, `calendar.html`, or `notes.html` (append `?embed=1` for iframe).
 
 ---
 

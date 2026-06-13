@@ -1,7 +1,7 @@
 /* Intern Tracker — shared app logic
    Data model (synced to a pinned Telegram message so the reminder
    cron + every device can see the same state):
-   { applied: { slug: epochMs }, notified: { slug: epochMs }, deadlines: [...], updatedAt }
+   { applied: { slug: epochMs }, notified: { slug: epochMs }, notes: { slug: markdown }, deadlines: [...], updatedAt }
 */
 "use strict";
 
@@ -24,10 +24,11 @@ const App = (() => {
       return {
         applied: d.applied || {},
         notified: d.notified || {},
+        notes: d.notes || {},
         deadlines: d.deadlines || [],
         updatedAt: d.updatedAt || 0,
       };
-    } catch { return { applied: {}, notified: {}, deadlines: [], updatedAt: 0 }; }
+    } catch { return { applied: {}, notified: {}, notes: {}, deadlines: [], updatedAt: 0 }; }
   }
   function saveLocal() { localStorage.setItem(DATA_KEY, JSON.stringify(data)); }
 
@@ -39,6 +40,9 @@ const App = (() => {
     localStorage.removeItem("jt.proxy");
     const stored = Number(localStorage.getItem(PIN_KEY));
     if (stored) pinnedMsgId = stored;
+    if (new URLSearchParams(location.search).get("embed") === "1") {
+      document.body.classList.add("embed");
+    }
   }
 
   function savePinId(id) {
@@ -157,6 +161,7 @@ const App = (() => {
             data = {
               applied: remote.applied || {},
               notified: remote.notified || {},
+              notes: remote.notes || {},
               deadlines: remote.deadlines || [],
               updatedAt: remote.updatedAt,
             };
@@ -382,6 +387,112 @@ const App = (() => {
     refreshConnection().then(() => pull());
   }
 
+  const OPENAI_PROXY = "https://webapp-two-peach.vercel.app/api/openai";
+
+  function openaiUrl() {
+    if (location.hostname.endsWith(".vercel.app")) return "/api/openai";
+    return OPENAI_PROXY;
+  }
+
+  async function aiEdit(action, text, company) {
+    const r = await fetch(openaiUrl(), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action, text, company }),
+    });
+    const j = await r.json();
+    if (!r.ok) throw new Error(j.error || "AI request failed");
+    return j.text;
+  }
+
+  /* ───────── notes page ───────── */
+  let notesSlug = "";
+
+  function renderNotesPreview() {
+    const editor = $("notesEditor");
+    const preview = $("notesPreview");
+    if (!editor || !preview) return;
+    const raw = editor.value;
+    if (typeof marked !== "undefined") {
+      preview.innerHTML = marked.parse(raw, { breaks: true });
+    } else {
+      preview.textContent = raw;
+    }
+  }
+
+  function loadNoteForSlug(slug) {
+    notesSlug = slug;
+    const editor = $("notesEditor");
+    if (!editor) return;
+    editor.value = (data.notes && data.notes[slug]) || "";
+    renderNotesPreview();
+  }
+
+  function saveCurrentNote() {
+    if (!notesSlug) return;
+    const text = $("notesEditor").value;
+    mutate(d => {
+      if (!d.notes) d.notes = {};
+      if (text.trim()) d.notes[notesSlug] = text;
+      else delete d.notes[notesSlug];
+    });
+    toast("Note saved");
+  }
+
+  async function runAi(action) {
+    const status = $("notesStatus");
+    const editor = $("notesEditor");
+    const company = $("notesCompany");
+    if (!editor?.value.trim()) {
+      status.textContent = "Write something first.";
+      status.className = "notes-status err";
+      return;
+    }
+    status.textContent = "Working…";
+    status.className = "notes-status";
+    try {
+      const out = await aiEdit(action, editor.value, company?.selectedOptions[0]?.text || "");
+      editor.value = out;
+      renderNotesPreview();
+      saveCurrentNote();
+      status.textContent = "Updated — saved.";
+      status.className = "notes-status ok";
+    } catch (e) {
+      status.textContent = e.message;
+      status.className = "notes-status err";
+    }
+  }
+
+  async function initNotes() {
+    boot();
+    absorbMagicLink();
+    wireSettings();
+    await loadCompanies();
+
+    const sel = $("notesCompany");
+    companies.slice().sort((a, b) => a.name.localeCompare(b.name)).forEach(c => {
+      const o = document.createElement("option");
+      o.value = c.slug;
+      o.textContent = c.name;
+      sel.appendChild(o);
+    });
+
+    if (sel.options.length) {
+      loadNoteForSlug(sel.value);
+    }
+    sel.addEventListener("change", () => loadNoteForSlug(sel.value));
+    $("notesEditor").addEventListener("input", renderNotesPreview);
+    $("notesSaveBtn").addEventListener("click", saveCurrentNote);
+    $("aiPolishBtn").addEventListener("click", () => runAi("polish"));
+    $("aiExpandBtn").addEventListener("click", () => runAi("expand"));
+    $("aiSummarizeBtn").addEventListener("click", () => runAi("summarize"));
+
+    rerender = () => {
+      if (notesSlug) loadNoteForSlug(notesSlug);
+    };
+    refreshConnection().then(() => pull());
+  }
+
   /* ───────── calendar page ───────── */
   const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   let calCursor = new Date();
@@ -515,5 +626,5 @@ const App = (() => {
   }
   let rerender = () => {};
 
-  return { initBoard, initCalendar };
+  return { initBoard, initCalendar, initNotes };
 })();
