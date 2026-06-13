@@ -393,6 +393,69 @@ body.embed .foot { display: none; }
 body.embed .masthead-inner { padding: 12px 16px; }
 body.embed .page { padding: 20px 16px 40px; }
 
+/* ── Resume tailor ── */
+.resume-layout {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 8px;
+}
+.resume-panel {
+  border: 1px solid var(--line); border-radius: var(--radius-card);
+  padding: 20px; background: var(--surface);
+}
+.resume-panel-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; margin-bottom: 8px;
+}
+.resume-panel-title {
+  font-family: var(--display); font-size: 18px; font-weight: 600; color: var(--ink);
+}
+.resume-panel-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.resume-hint { font-size: 13px; color: var(--ink-soft); margin-bottom: 12px; }
+.resume-editor {
+  width: 100%; min-height: 280px; border: 1px solid var(--line);
+  border-radius: var(--radius-card); padding: 12px; font-family: ui-monospace, Consolas, monospace;
+  font-size: 13px; line-height: 1.5; resize: vertical; color: var(--ink);
+}
+.resume-editor:focus {
+  outline: none; border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(176, 38, 92, 0.12);
+}
+.resume-actions { margin-top: 12px; }
+.resume-status { margin-top: 12px; font-size: 14px; color: var(--ink-soft); min-height: 20px; }
+.resume-status.ok { color: var(--accent); }
+.resume-status.err { color: var(--accent-hover); }
+.file-btn { cursor: pointer; }
+.file-btn input { display: none; }
+.resume-results {
+  margin-top: 24px; border: 1px solid var(--line); border-radius: var(--radius-card);
+  padding: 20px; background: var(--surface-soft);
+}
+.resume-results-head {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px;
+}
+.resume-results-head h3 {
+  font-family: var(--display); font-size: 18px; font-weight: 600; margin-right: auto;
+}
+.resume-swap-badge {
+  font-size: 12px; font-weight: 500; color: var(--accent);
+  background: var(--accent-soft); padding: 4px 10px; border-radius: var(--radius-pill);
+}
+.resume-download-actions { display: flex; gap: 8px; }
+.resume-insights {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+}
+.insight-card {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius-card); padding: 16px;
+}
+.insight-card h4 {
+  font-size: 12px; font-weight: 500; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--ink-soft); margin-bottom: 10px;
+}
+.insight-pre {
+  font-family: var(--font); font-size: 13px; line-height: 1.55;
+  white-space: pre-wrap; color: var(--ink); margin: 0;
+}
+
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
@@ -412,4 +475,6 @@ body.embed .page { padding: 20px 16px 40px; }
   .strip-label { font-size: 24px; }
   .cal-day { min-height: 64px; }
   .md-editor { grid-template-columns: 1fr; }
+  .resume-layout { grid-template-columns: 1fr; }
+  .resume-insights { grid-template-columns: 1fr; }
 }

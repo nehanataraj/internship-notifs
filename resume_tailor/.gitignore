@@ -1,0 +1,19 @@
+# OS
+.DS_Store
+
+# Editor
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+
+# Uploads (resume files — never commit)
+uploads/
+
+# Local output from GUI runs (optional)
+output/sessions/

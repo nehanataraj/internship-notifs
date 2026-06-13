@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Resume Tailor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-icon" aria-hidden="true">◈</span>
+        <div>
+          <h1>Resume Tailor</h1>
+          <p class="tagline">Upload Word (.docx) → same layout, ~8–10 keyword swaps for the job.</p>
+        </div>
+      </div>
+    </div>
+    {% if not has_api_key %}
+    <div class="banner banner-warn" role="alert">
+      Add <code>GEMINI_API_KEY</code> to a <code>.env</code> file (see <code>.env.example</code>). Get a free key at <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio</a>, then restart the app.
+    </div>
+    {% endif %}
+  </header>
+
+  <main class="layout">
+    <section class="panel" aria-labelledby="resume-heading">
+      <h2 id="resume-heading">Your resume (.docx)</h2>
+      <p class="hint">Upload your Word resume — you’ll download a <strong>.docx</strong> with the same fonts and layout.</p>
+
+      <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Upload resume file">
+        <input type="file" id="file-input" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden />
+        <div class="dropzone-inner">
+          <span class="dropzone-icon" aria-hidden="true">↑</span>
+          <p><strong>Drop your .docx resume here</strong> or click to browse</p>
+          <p class="dropzone-meta">Microsoft Word (.docx) required for formatted output</p>
+        </div>
+        <p id="file-name" class="file-name" hidden></p>
+      </div>
+
+      <label class="field-label" for="resume-text">Extracted text <span class="optional">(review after upload)</span></label>
+      <textarea id="resume-text" rows="12" placeholder="Upload a .docx file…" spellcheck="false"></textarea>
+
+      <details class="style-details">
+        <summary>Writing style <span class="optional">(optional)</span></summary>
+        <p class="hint">Loaded from <code>resume/writing_style.md</code> if saved.</p>
+        <textarea id="writing-style" rows="5" placeholder="Optional style notes…"></textarea>
+      </details>
+    </section>
+
+    <section class="panel" aria-labelledby="jd-heading">
+      <h2 id="jd-heading">Job description</h2>
+      <p class="hint">Paste the full posting — responsibilities, requirements, and keywords.</p>
+      <textarea id="job-description" rows="18" placeholder="Paste the job description here…"></textarea>
+
+      <button type="button" id="tailor-btn" class="btn-primary" {% if not has_api_key %}disabled{% endif %}>
+        Tailor resume
+      </button>
+      <p id="status" class="status" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <section id="results" class="results" hidden>
+    <h2>Your tailored resume</h2>
+
+    <div id="word-result" class="word-result">
+      <p class="word-result-lead">Your resume is ready — <strong>same Word layout and wording</strong>, with ~8–10 JD keyword swaps.</p>
+      <button type="button" class="btn-primary btn-download-large" id="download-docx-btn">
+        Download tailored_resume.docx
+      </button>
+      <p class="hint word-result-note">Same Word layout as your upload — bullets, underlines, and fonts preserved. Only wording changes. The file is fully editable; if Word shows Protected View, click <strong>Enable Editing</strong>.</p>
+    </div>
+
+    <div id="insights" class="insights-section">
+      <p class="insights-heading">Review before you submit</p>
+      <div class="insights-grid">
+        <article class="insight-card" aria-labelledby="changelog-title">
+          <h3 id="changelog-title">What changed</h3>
+          <p class="insight-subtitle">Each word swapped: old → new (Word file keeps everything else identical)</p>
+          <div id="changelog-body" class="insight-body" role="document"></div>
+          <div class="insight-toolbar">
+            <button type="button" class="btn-secondary" id="copy-changelog-btn">Copy</button>
+          </div>
+        </article>
+        <article class="insight-card" aria-labelledby="alignment-title">
+          <h3 id="alignment-title">Alignment outlook</h3>
+          <p class="insight-subtitle">Strong matches and honest gaps vs. the job</p>
+          <div id="alignment-body" class="insight-body" role="document"></div>
+          <div class="insight-toolbar">
+            <button type="button" class="btn-secondary" id="copy-alignment-btn">Copy</button>
+          </div>
+        </article>
+      </div>
+    </div>
+
+    <details class="md-preview">
+      <summary>Plain-text preview (same order as Word — optional)</summary>
+      <div class="tabs" role="tablist">
+        <button type="button" class="tab active" role="tab" data-tab="resume">Tailored text</button>
+        <button type="button" class="tab" role="tab" data-tab="changelog-md">Changelog</button>
+        <button type="button" class="tab" role="tab" data-tab="alignment-md">Alignment</button>
+      </div>
+      <div class="result-toolbar">
+        <button type="button" class="btn-secondary" id="copy-btn">Copy</button>
+        <button type="button" class="btn-secondary" id="download-md-btn">Download .md</button>
+      </div>
+      <pre id="result-body" class="result-body"></pre>
+    </details>
+  </section>
+
+  <footer class="footer">
+    <p>We swap ~8–10 keywords to match the job — same formatting, same sentences. Review every change before you apply.</p>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

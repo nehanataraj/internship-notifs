@@ -7,6 +7,7 @@ Two-page companion app for the [Job_Notifier](https://github.com/nehanataraj/Job
 | **Companies** | [index.html](index.html) | All tracked companies — mark applied (grays out, moves to bottom); pink highlight when the watcher finds new jobs |
 | **Calendar** | [calendar.html](calendar.html) | OA / interview deadlines — Telegram reminder **2 days before** each one |
 | **Notes** | [notes.html](notes.html) | Per-company **markdown** prep notes with live preview + AI polish (OpenAI) |
+| **Resume** | [resume.html](resume.html) | Tailor resume to a JD (~10 keyword swaps) — save once, download **PDF** |
 
 **Live app (recommended):** https://webapp-two-peach.vercel.app  
 **GitHub Pages mirror:** https://nehanataraj.github.io/internship-notifs/
@@ -142,7 +143,39 @@ Add Intern Tracker as a feature on any site via link or iframe:
 ></iframe>
 ```
 
-Point visitors to a specific tab: `index.html`, `calendar.html`, or `notes.html` (append `?embed=1` for iframe).
+Point visitors to a specific tab: `index.html`, `calendar.html`, `notes.html`, or `resume.html` (append `?embed=1` for iframe).
+
+---
+
+## Resume tailor (Fly.io backend)
+
+Adapted from [aanil677/resume_tailor](https://github.com/aanil677/resume_tailor). Uses **OpenAI** (not Gemini). Paste markdown resume once, save, tailor per job, download PDF.
+
+**Deploy the API** (one-time):
+
+```bash
+cd webapp/resume_tailor
+# Install flyctl: https://fly.io/docs/hands-on/install-flyctl/
+fly launch --no-deploy   # app name: resume-tailor
+fly secrets set OPENAI_API_KEY=sk-...
+fly deploy
+```
+
+**Vercel env** (Project → Settings → Environment Variables):
+
+| Variable | Value |
+|----------|-------|
+| `RESUME_API_URL` | `https://resume-tailor.fly.dev` (your Fly app URL) |
+
+Redeploy Vercel after setting. The Resume tab calls `/api/resume/*` which proxies to Fly.
+
+**Local API test:**
+
+```bash
+cd webapp/resume_tailor
+cp .env.example .env   # add OPENAI_API_KEY
+./run.sh               # or: uvicorn app.main:app --port 8765
+```
 
 ---
 
@@ -168,6 +201,7 @@ cp companies.json webapp/companies.json   # if working from monorepo checkout
 | `Bot token looks invalid` | Paste only the token line from BotFather (`123456789:ABC…`), not the whole message |
 | Sync dot gray after reload | Open Settings → **Send test** again, or use the magic link |
 | Job highlights not showing | Watcher and webapp must use the **same bot**; watcher calls `mark_company_notified()` after each alert |
+| Resume tailor fails / 502 | Deploy Fly backend and set `RESUME_API_URL` on Vercel |
 
 **Clear stale browser data:** DevTools → Application → Local Storage → delete `jt.proxy` if present, then reload.
 

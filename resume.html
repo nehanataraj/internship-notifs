@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resume — Intern Tracker</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23B0265C'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="brand">
+      <div>
+        <h1>Intern Tracker</h1>
+        <p class="brand-sub">Application progress</p>
+      </div>
+    </div>
+    <nav class="tabs" aria-label="Main">
+      <a href="index.html" class="tab">Companies</a>
+      <a href="calendar.html" class="tab">Calendar</a>
+      <a href="notes.html" class="tab">Notes</a>
+      <a href="resume.html" class="tab active">Resume</a>
+    </nav>
+    <div class="header-right">
+      <span class="sync-dot" id="syncDot" title="Sync status" aria-hidden="true"></span>
+      <button type="button" class="btn ghost small" id="settingsBtn" title="Telegram sync">Settings</button>
+    </div>
+  </div>
+</header>
+
+<main class="page">
+  <section class="board-head">
+    <div class="page-title">
+      <h2 class="strip-label">Resume tailor</h2>
+      <p class="strip-sub">~10 keyword swaps to match a job — same facts, no invented skills</p>
+    </div>
+  </section>
+
+  <section class="resume-layout">
+    <div class="resume-panel">
+      <div class="resume-panel-head">
+        <h3 class="resume-panel-title">Your resume</h3>
+        <div class="resume-panel-actions">
+          <label class="btn ghost small file-btn">
+            Upload
+            <input type="file" id="resumeFile" accept=".md,.markdown,.txt" hidden>
+          </label>
+          <button type="button" class="btn solid small" id="saveResumeBtn">Save resume</button>
+        </div>
+      </div>
+      <p class="resume-hint">Paste markdown once and save — reuse for every application.</p>
+      <textarea id="resumeEditor" class="resume-editor" rows="16" placeholder="# Your Name&#10;&#10;## Experience&#10;- Bullet one…" spellcheck="true"></textarea>
+    </div>
+
+    <div class="resume-panel">
+      <h3 class="resume-panel-title">Job description</h3>
+      <p class="resume-hint">Paste the full posting.</p>
+      <textarea id="jobDescription" class="resume-editor" rows="16" placeholder="Paste the job description here…"></textarea>
+      <div class="resume-actions">
+        <button type="button" class="btn solid" id="tailorResumeBtn">Tailor resume</button>
+      </div>
+      <p class="resume-status" id="resumeStatus" role="status"></p>
+    </div>
+  </section>
+
+  <section id="resumeResults" class="resume-results" hidden>
+    <div class="resume-results-head">
+      <h3>Tailored resume</h3>
+      <span class="resume-swap-badge" id="swapCount"></span>
+      <div class="resume-download-actions">
+        <button type="button" class="btn solid small" id="downloadPdfBtn">Download PDF</button>
+        <button type="button" class="btn ghost small" id="printPdfBtn">Print</button>
+      </div>
+    </div>
+    <div class="resume-insights">
+      <article class="insight-card">
+        <h4>What changed</h4>
+        <pre id="changelogBody" class="insight-pre"></pre>
+      </article>
+      <article class="insight-card">
+        <h4>Alignment outlook</h4>
+        <pre id="alignmentBody" class="insight-pre"></pre>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <span>Adapted from <a href="https://github.com/aanil677/resume_tailor" target="_blank" rel="noopener">resume_tailor</a> — facts never invented</span>
+</footer>
+
+<dialog id="settingsModal" class="modal">
+  <form method="dialog" class="modal-card">
+    <h2 class="modal-title">Telegram sync</h2>
+    <p class="modal-hint">Use your <strong>InternshipJobWatcherBot</strong> token (same as <code>.env</code>) for full sync. Saved resume syncs across devices via the pinned message.</p>
+    <label class="field"><span>Bot token</span><input type="password" id="tgToken" placeholder="123456:ABC…" autocomplete="off"></label>
+    <label class="field"><span>Chat ID</span><input type="text" id="tgChat" placeholder="6062137847" autocomplete="off"></label>
+    <div class="modal-actions">
+      <button type="button" class="btn ghost" id="testSyncBtn">Send test</button>
+      <button type="submit" class="btn solid" id="saveSyncBtn">Save</button>
+    </div>
+    <p class="modal-status" id="syncStatusMsg" role="status"></p>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/app.js?v=9"></script>
+<script>App.initResume();</script>
+</body>
+</html>

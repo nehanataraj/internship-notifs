@@ -1,0 +1,68 @@
+---
+description: Tailor resume to job description without fabricating experience
+globs:
+  - resume/**
+  - job_descriptions/**
+  - output/**
+alwaysApply: false
+---
+
+# Resume tailoring (strict)
+
+When the user asks to tailor a resume for a job description in this project:
+
+## Source of truth
+
+- `resume/base_resume.md` is the only factual record of experience, education, skills, dates, companies, titles, tools, and metrics.
+- `job_descriptions/current.md` (or a named file the user specifies) is the target role.
+- If `resume/writing_style.md` has content, match its tone and bullet patterns when rewording.
+
+## Allowed changes
+
+1. **Reorder** sections, roles, and bullets so JD-relevant material appears first.
+2. **Reword** existing bullets lightly so required skills and outcomes are visible, using JD vocabulary only when it truthfully describes work already stated in the base resume.
+3. **Group or label** skills already listed (e.g. pull matching tools to the front of a Skills line).
+4. **Tighten** wording (remove filler) without dropping factual claims.
+5. **Write** `output/changelog.md` entries and optional alignment notes (matches + honest gaps).
+
+## Forbidden (never do this)
+
+- Add or imply employers, titles, dates, degrees, certifications, projects, publications, or awards not in the base resume.
+- Add tools, languages, frameworks, domains, or methodologies the base resume does not support.
+- Invent or inflate metrics, team sizes, budgets, user counts, percentages, or timelines.
+- Merge or split roles in a way that changes what happened.
+- Remove a role or bullet entirely unless the user explicitly asks; de-emphasize via order instead.
+- Copy text from the JD into the resume as if the user did that work when the base resume does not support it.
+
+## Rewording standard
+
+For each changed bullet, every claim must trace to the same bullet or an explicit fact elsewhere in `base_resume.md`. If a JD requirement is not supported, list it under **Honest gaps** in the changelog — do not fabricate a bullet to cover it.
+
+Every reworded bullet must keep **what → how → impact** (X–Y–Z):
+- **X (what):** accomplishment — strong verb + deliverable
+- **Y (how):** tools, methods, or approach (only facts already on the resume)
+- **Z (impact):** outcome or metric (only if already stated — never invent)
+
+Pattern: did **X** using **Y**, which impacted **Z** — one sentence, not three fragments.
+
+Voice (CRITICAL):
+- **Active command voice** — verb-first (Built, Engineered, Created). Never passive ("were used to", "was built").
+- **Parallel structure** — matching verb forms across clauses.
+- **Match the original resume** — light keyword weave only; do not rewrite in a new AI voice.
+- Do NOT lead with tools ("Python-based X were used…") — lead with what the candidate did.
+
+Prefer:
+- Same tense and structure as `writing_style.md` or GUI style samples when present.
+- Strong verbs already implied by the original bullet.
+- JD keywords in X or Y when they accurately describe existing work.
+- Human, natural phrasing — fix grammar from style samples; do not mirror mistakes or add AI buzzwords the user does not use.
+
+## Deliverables
+
+1. Save tailored resume to `output/tailored_resume.md` (same sections as base; tailored order/wording).
+2. Append to `output/changelog.md` using the template in that file.
+3. Tell the user to review reworded bullets; offer a more conservative pass if anything feels overstated.
+
+## User prompt shorthand
+
+If the user says "tailor my resume", read `resume/base_resume.md` and `job_descriptions/current.md`, apply this rule, and write outputs without asking unless the base resume is still placeholder text.

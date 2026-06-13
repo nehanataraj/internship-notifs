@@ -1,7 +1,7 @@
 /* Intern Tracker — shared app logic
    Data model (synced to a pinned Telegram message so the reminder
    cron + every device can see the same state):
-   { applied: { slug: epochMs }, notified: { slug: epochMs }, notes: { slug: markdown }, deadlines: [...], updatedAt }
+   { applied, notified, notes, resume_md, deadlines, updatedAt }
 */
 "use strict";
 
@@ -9,6 +9,7 @@ const App = (() => {
   const DATA_KEY = "jt.data.v1";
   const CFG_KEY = "jt.cfg.v1";
   const PIN_KEY = "jt.pin.v1";
+  const RESUME_KEY = "jt.resume.v1";
   const MARKER = "JTRACK::";
 
   /* ───────── state ───────── */
@@ -25,10 +26,11 @@ const App = (() => {
         applied: d.applied || {},
         notified: d.notified || {},
         notes: d.notes || {},
+        resume_md: d.resume_md || "",
         deadlines: d.deadlines || [],
         updatedAt: d.updatedAt || 0,
       };
-    } catch { return { applied: {}, notified: {}, notes: {}, deadlines: [], updatedAt: 0 }; }
+    } catch { return { applied: {}, notified: {}, notes: {}, resume_md: "", deadlines: [], updatedAt: 0 }; }
   }
   function saveLocal() { localStorage.setItem(DATA_KEY, JSON.stringify(data)); }
 
@@ -162,6 +164,7 @@ const App = (() => {
               applied: remote.applied || {},
               notified: remote.notified || {},
               notes: remote.notes || {},
+              resume_md: remote.resume_md || "",
               deadlines: remote.deadlines || [],
               updatedAt: remote.updatedAt,
             };
@@ -493,6 +496,148 @@ const App = (() => {
     refreshConnection().then(() => pull());
   }
 
+    refreshConnection().then(() => pull());
+  }
+
+  /* ───────── resume tailor page ───────── */
+  const RESUME_API_PROXY = "https://webapp-two-peach.vercel.app/api/resume";
+  let tailoredResume = "";
+
+  function resumeApi(path) {
+    if (location.hostname.endsWith(".vercel.app")) return `/api/resume/${path}`;
+    return `${RESUME_API_PROXY}/${path}`;
+  }
+
+  function loadSavedResume() {
+    try {
+      const local = JSON.parse(localStorage.getItem(RESUME_KEY));
+      if (local?.markdown) return local.markdown;
+    } catch { /* ignore */ }
+    return data.resume_md || "";
+  }
+
+  function saveResumeMarkdown(text) {
+    const md = text.trim();
+    localStorage.setItem(RESUME_KEY, JSON.stringify({ markdown: md, savedAt: Date.now() }));
+    mutate(d => { d.resume_md = md; });
+    toast("Resume saved");
+  }
+
+  async function initResume() {
+    boot();
+    absorbMagicLink();
+    wireSettings();
+
+    const editor = $("resumeEditor");
+    const jd = $("jobDescription");
+    const status = $("resumeStatus");
+    const results = $("resumeResults");
+    const fileInput = $("resumeFile");
+
+    if (editor) editor.value = loadSavedResume();
+
+    $("saveResumeBtn")?.addEventListener("click", () => {
+      if (!editor?.value.trim()) {
+        status.textContent = "Paste or upload your resume first.";
+        status.className = "resume-status err";
+        return;
+      }
+      saveResumeMarkdown(editor.value);
+      status.textContent = "Resume saved — tailor as many jobs as you like.";
+      status.className = "resume-status ok";
+    });
+
+    fileInput?.addEventListener("change", async () => {
+      const file = fileInput.files?.[0];
+      if (!file) return;
+      editor.value = await file.text();
+      status.textContent = `Loaded ${file.name}`;
+      status.className = "resume-status ok";
+      fileInput.value = "";
+    });
+
+    $("tailorResumeBtn")?.addEventListener("click", async () => {
+      if (!editor?.value.trim()) {
+        status.textContent = "Add your resume first.";
+        status.className = "resume-status err";
+        return;
+      }
+      if (!jd?.value.trim()) {
+        status.textContent = "Paste the job description.";
+        status.className = "resume-status err";
+        return;
+      }
+      status.textContent = "Tailoring (~10 keyword swaps)…";
+      status.className = "resume-status";
+      $("tailorResumeBtn").disabled = true;
+      try {
+        const r = await fetch(resumeApi("tailor-md"), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            resume_text: editor.value,
+            job_description: jd.value,
+          }),
+        });
+        const j = await r.json();
+        if (!r.ok) throw new Error(typeof j.detail === "string" ? j.detail : (j.detail?.[0]?.msg || j.error || "Tailor failed"));
+        tailoredResume = j.tailored_resume || "";
+        $("changelogBody").textContent = j.changelog || "";
+        $("alignmentBody").textContent = j.alignment_notes || "";
+        $("swapCount").textContent = `${j.replacements_applied ?? "?"} swaps`;
+        results.hidden = false;
+        status.textContent = "Done — download PDF when ready.";
+        status.className = "resume-status ok";
+      } catch (e) {
+        status.textContent = e.message;
+        status.className = "resume-status err";
+      } finally {
+        $("tailorResumeBtn").disabled = false;
+      }
+    });
+
+    $("downloadPdfBtn")?.addEventListener("click", async () => {
+      if (!tailoredResume) return;
+      status.textContent = "Building PDF…";
+      try {
+        const r = await fetch(resumeApi("md-to-pdf"), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ markdown: tailoredResume }),
+        });
+        if (!r.ok) {
+          const err = await r.json().catch(() => ({}));
+          throw new Error(err.detail || "PDF failed");
+        }
+        const blob = await r.blob();
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "tailored_resume.pdf";
+        a.click();
+        URL.revokeObjectURL(a.href);
+        status.textContent = "PDF downloaded.";
+        status.className = "resume-status ok";
+      } catch (e) {
+        status.textContent = e.message;
+        status.className = "resume-status err";
+      }
+    });
+
+    $("printPdfBtn")?.addEventListener("click", () => {
+      if (!tailoredResume) return;
+      const w = window.open("", "_blank");
+      if (!w) return;
+      w.document.write(`<pre style="font-family:Inter,system-ui,sans-serif;white-space:pre-wrap;padding:24px">${esc(tailoredResume)}</pre>`);
+      w.document.close();
+      w.print();
+    });
+
+    rerender = () => {
+      if (editor && !editor.value && data.resume_md) editor.value = data.resume_md;
+    };
+    refreshConnection().then(() => pull());
+  }
+
   /* ───────── calendar page ───────── */
   const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   let calCursor = new Date();
@@ -626,5 +771,5 @@ const App = (() => {
   }
   let rerender = () => {};
 
-  return { initBoard, initCalendar, initNotes };
+  return { initBoard, initCalendar, initNotes, initResume };
 })();
