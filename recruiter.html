@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recruiter template — Intern Tracker</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23B0265C'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="brand">
+      <div>
+        <h1>Intern Tracker</h1>
+        <p class="brand-sub">Application progress</p>
+      </div>
+    </div>
+    <nav class="tabs" aria-label="Main">
+      <a href="index.html" class="tab">Companies</a>
+      <a href="calendar.html" class="tab">Calendar</a>
+      <a href="resume.html" class="tab">Resume</a>
+      <a href="recruiter.html" class="tab active">Recruiter</a>
+    </nav>
+    <div class="header-right">
+      <span class="sync-dot" id="syncDot" title="Sync status" aria-hidden="true"></span>
+      <button type="button" class="btn ghost small" id="settingsBtn" title="Telegram sync">Settings</button>
+    </div>
+  </div>
+</header>
+
+<main class="page">
+  <section class="board-head">
+    <div class="page-title">
+      <h2 class="strip-label">Recruiter template</h2>
+      <p class="strip-sub">Post–career fair follow-up — LinkedIn note or email</p>
+    </div>
+  </section>
+
+  <aside class="recruiter-tip">
+    <p>The move is to ask specifically what problems they're finding/working on during the career fair/event and harvest their email. Follow up message mostly useless otherwise.</p>
+  </aside>
+
+  <section class="recruiter-template-ref">
+    <h3 class="recruiter-ref-title">Email template</h3>
+    <pre class="recruiter-ref-body">Hi [Name]!
+
+Great meeting you at [Event] — I really enjoyed hearing about [team's project/need]. It reminded me of [article/resource], which took a similar approach — [1 clause tying it to attached article].
+I've applied for [Role/Internship] and would love to connect with someone on the engineering team in the future.
+
+Really enjoyed our conversation — it was lovely hearing about [topic talked about]. Thanks again for your time!
+[Your Name]</pre>
+  </section>
+
+  <section class="recruiter-layout">
+    <div class="resume-panel">
+      <h3 class="resume-panel-title">Conversation context</h3>
+      <p class="resume-hint">Paste notes from the booth — what they said they're working on, team name, problems, anything you remember. OpenAI fills the bracketed gaps.</p>
+      <textarea id="recruiterContext" class="resume-editor" rows="10" placeholder="Met Sarah at GT career fair. She runs the payments infra team — scaling fraud detection on real-time transactions. Mentioned they're hiring SWE interns for backend. I talked about my FastAPI project…" spellcheck="true"></textarea>
+
+      <h3 class="resume-panel-title recruiter-fields-title">Known details <span class="recruiter-optional">optional overrides</span></h3>
+      <div class="recruiter-fields">
+        <label class="field"><span>Recruiter name</span><input type="text" id="recName" placeholder="Sarah" autocomplete="off"></label>
+        <label class="field"><span>Event</span><input type="text" id="recEvent" placeholder="GT Spring Career Fair" autocomplete="off"></label>
+        <label class="field"><span>Role / internship</span><input type="text" id="recRole" placeholder="SWE intern" autocomplete="off"></label>
+        <label class="field"><span>Your name</span><input type="text" id="recYourName" placeholder="Alex Chen" autocomplete="off"></label>
+      </div>
+
+      <div class="recruiter-actions">
+        <div class="mode-toggle" role="tablist" aria-label="Message mode">
+          <button type="button" class="mode-btn active" data-mode="email" role="tab" aria-selected="true">Email</button>
+          <button type="button" class="mode-btn" data-mode="linkedin" role="tab" aria-selected="false">LinkedIn <span class="mode-limit">300 chars</span></button>
+        </div>
+        <button type="button" class="btn solid" id="generateRecruiterBtn">Generate message</button>
+      </div>
+      <p class="resume-status" id="recruiterStatus" role="status"></p>
+    </div>
+
+    <div class="resume-panel recruiter-output-panel">
+      <div class="recruiter-output-head">
+        <h3 class="resume-panel-title">Generated message</h3>
+        <span class="char-count" id="charCount" hidden></span>
+        <button type="button" class="btn ghost small" id="copyRecruiterBtn" disabled>Copy</button>
+      </div>
+      <textarea id="recruiterOutput" class="resume-editor recruiter-output" rows="16" readonly placeholder="Generated message appears here…"></textarea>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <span>LinkedIn connection notes are capped at 300 characters</span>
+</footer>
+
+<dialog id="settingsModal" class="modal">
+  <form method="dialog" class="modal-card">
+    <h2 class="modal-title">Telegram sync</h2>
+    <p class="modal-hint">Use your <strong>InternshipJobWatcherBot</strong> token (same as <code>.env</code>) for full sync.</p>
+    <label class="field"><span>Bot token</span><input type="password" id="tgToken" placeholder="123456:ABC…" autocomplete="off"></label>
+    <label class="field"><span>Chat ID</span><input type="text" id="tgChat" placeholder="6062137847" autocomplete="off"></label>
+    <div class="modal-actions">
+      <button type="button" class="btn ghost" id="testSyncBtn">Send test</button>
+      <button type="submit" class="btn solid" id="saveSyncBtn">Save</button>
+    </div>
+    <p class="modal-status" id="syncStatusMsg" role="status"></p>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/app.js?v=13"></script>
+<script>App.initRecruiter();</script>
+</body>
+</html>

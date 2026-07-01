@@ -1,12 +1,11 @@
 # Intern Tracker
 
-Two-page companion app for the [Job_Notifier](https://github.com/nehanataraj/Job_Notifier) internship watcher.
+Companion app for the [Job_Notifier](https://github.com/nehanataraj/Job_Notifier) internship watcher.
 
 | Page | URL | What it does |
 |------|-----|--------------|
 | **Companies** | [index.html](index.html) | All tracked companies — mark applied (grays out, moves to bottom); pink highlight when the watcher finds new jobs |
 | **Calendar** | [calendar.html](calendar.html) | OA / interview deadlines — Telegram reminder **2 days before** each one |
-| **Notes** | [notes.html](notes.html) | Per-company **markdown** prep notes with live preview + AI polish (OpenAI) |
 | **Resume** | [resume.html](resume.html) | Tailor resume to a JD (~10 keyword swaps) — save once, download **PDF** |
 
 **Live app (recommended):** https://webapp-two-peach.vercel.app  
@@ -109,22 +108,6 @@ The daily workflow (`.github/workflows/remind.yml`) runs `remind.py` on a cron.
 
 ---
 
-## OpenAI (Notes AI editing)
-
-The **Notes** tab uses GPT-4o-mini to polish, expand, or summarize markdown. The API key stays on the server — never in the browser or git.
-
-**Vercel** (Project → Settings → Environment Variables):
-
-| Variable | Value |
-|----------|-------|
-| `OPENAI_API_KEY` | Your OpenAI project key |
-
-Redeploy after adding. Local dev: copy `.env.example` to `.env` and run `npx vercel dev`.
-
-**Security:** If a key was ever pasted in chat or committed, rotate it at [platform.openai.com](https://platform.openai.com/api-keys).
-
----
-
 ## Embed on your website
 
 Add Intern Tracker as a feature on any site via link or iframe:
@@ -143,7 +126,7 @@ Add Intern Tracker as a feature on any site via link or iframe:
 ></iframe>
 ```
 
-Point visitors to a specific tab: `index.html`, `calendar.html`, `notes.html`, or `resume.html` (append `?embed=1` for iframe).
+Point visitors to a specific tab: `index.html`, `calendar.html`, or `resume.html` (append `?embed=1` for iframe).
 
 ---
 
