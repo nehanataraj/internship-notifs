@@ -12,17 +12,21 @@ export default async function handler(req, res) {
     return;
   }
 
-  const { token, method, params } = req.body || {};
+  const { token: clientToken, method, params } = req.body || {};
+  const token = process.env.TELEGRAM_BOT_TOKEN || clientToken;
   if (!token || !method) {
-    res.status(400).json({ ok: false, description: "token and method required" });
+    res.status(400).json({ ok: false, description: "method required (server token missing)" });
     return;
   }
+
+  const chatId = params && params.chat_id ? params.chat_id : process.env.TELEGRAM_CHAT_ID;
+  const finalParams = chatId ? { ...(params || {}), chat_id: chatId } : (params || {});
 
   try {
     const upstream = await fetch(`https://api.telegram.org/bot${token}/${method}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(params || {}),
+      body: JSON.stringify(finalParams),
     });
     const data = await upstream.json();
     res.status(upstream.status).json(data);

@@ -11,10 +11,18 @@ const App = (() => {
   const PIN_KEY = "jt.pin.v1";
   const RESUME_KEY = "jt.resume.v1";
   const MARKER = "JTRACK::";
+  const CFG_REV = 3;
+  /* Bot token lives ONLY in the Vercel proxy (TELEGRAM_BOT_TOKEN env var).
+     The client never holds it. chat_id is a non-secret user id and the
+     proxy fills in TELEGRAM_CHAT_ID when omitted. */
+  const DEFAULT_CFG = {
+    token: "",
+    chat: "6062137847",
+  };
 
   /* ───────── state ───────── */
   let data = loadLocal();
-  let cfg = loadCfg();
+  let cfg = ensureCfg();
   let pinnedMsgId = null;
   let pushTimer = null;
   let companies = [];
@@ -34,12 +42,19 @@ const App = (() => {
   }
   function saveLocal() { localStorage.setItem(DATA_KEY, JSON.stringify(data)); }
 
+  function ensureCfg() {
+    return { ...DEFAULT_CFG };
+  }
+
   function loadCfg() {
-    try { return JSON.parse(localStorage.getItem(CFG_KEY)) || null; } catch { return null; }
+    return ensureCfg();
   }
 
   function boot() {
     localStorage.removeItem("jt.proxy");
+    cfg = ensureCfg();
+    localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
+    localStorage.setItem("jt.cfg.rev", String(CFG_REV));
     const stored = Number(localStorage.getItem(PIN_KEY));
     if (stored) pinnedMsgId = stored;
     if (new URLSearchParams(location.search).get("embed") === "1") {
@@ -54,19 +69,13 @@ const App = (() => {
     }
   }
 
-  /* magic link: #cfg=base64(token|chat) — saved once, then stripped from URL */
+  /* magic link: legacy — credentials are hardcoded; strip hash only */
   function absorbMagicLink() {
-    const m = location.hash.match(/#cfg=([A-Za-z0-9+/=_-]+)/);
-    if (!m) return;
-    try {
-      const [token, chat] = atob(m[1].replace(/-/g, "+").replace(/_/g, "/")).split("|");
-      if (token && chat) {
-        cfg = { token, chat };
-        localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
-        toast("Telegram sync configured");
-      }
-    } catch { /* bad link, ignore */ }
-    history.replaceState(null, "", location.pathname + location.search);
+    if (/#cfg=/.test(location.hash)) {
+      cfg = ensureCfg();
+      localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
+      history.replaceState(null, "", location.pathname + location.search);
+    }
   }
 
   const PROXY = "https://webapp-two-peach.vercel.app/api/telegram";
@@ -100,7 +109,7 @@ const App = (() => {
   }
 
   async function tg(method, params) {
-    if (!cfg) throw new Error("no-config");
+    cfg = ensureCfg();
     return tgViaProxy(method, params);
   }
 
@@ -137,7 +146,7 @@ const App = (() => {
   }
 
   async function refreshConnection() {
-    if (!cfg) return setDot("");
+    cfg = ensureCfg();
     setDot("busy");
     try {
       await tg("getMe", {});
@@ -151,7 +160,7 @@ const App = (() => {
   }
 
   async function pull() {
-    if (!cfg) return;
+    cfg = ensureCfg();
     try {
       const chat = await tg("getChat", { chat_id: cfg.chat });
       const pm = chat.pinned_message;
@@ -183,7 +192,7 @@ const App = (() => {
   }
 
   async function push() {
-    if (!cfg) return;
+    cfg = ensureCfg();
     const text = encodeData();
     try {
       if (pinnedMsgId) {
@@ -261,27 +270,23 @@ const App = (() => {
   function wireSettings() {
     const modal = $("settingsModal");
     $("settingsBtn").addEventListener("click", () => {
-      if (cfg) { $("tgToken").value = cfg.token; $("tgChat").value = cfg.chat; }
+      cfg = ensureCfg();
+      $("tgToken").value = cfg.token;
+      $("tgChat").value = cfg.chat;
       $("syncStatusMsg").textContent = "";
       modal.showModal();
     });
     $("saveSyncBtn").addEventListener("click", () => {
-      try {
-        const next = sanitizeCfg($("tgToken").value, $("tgChat").value);
-        cfg = next;
-        localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
-        refreshConnection().then(() => pull());
-        toast("Sync settings saved");
-      } catch (e) {
-        $("syncStatusMsg").textContent = e.message;
-        $("syncStatusMsg").className = "modal-status err";
-      }
+      cfg = ensureCfg();
+      localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
+      refreshConnection().then(() => pull());
+      toast("Telegram sync is always on");
     });
     $("testSyncBtn").addEventListener("click", async () => {
       const status = $("syncStatusMsg");
       status.textContent = "Sending…"; status.className = "modal-status";
       try {
-        cfg = sanitizeCfg($("tgToken").value, $("tgChat").value);
+        cfg = ensureCfg();
         $("tgToken").value = cfg.token;
         $("tgChat").value = cfg.chat;
         await tg("getMe", {});
@@ -291,10 +296,10 @@ const App = (() => {
           text: "Intern Tracker connected. Reminders will be sent 2 days before each OA and interview.",
         });
         localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
-        status.textContent = "Delivered — check Telegram. Settings saved."; status.className = "modal-status ok";
+        status.textContent = "Delivered — check Telegram."; status.className = "modal-status ok";
         await refreshConnection();
         await pull();
-        toast("Sync settings saved");
+        toast("Test message sent");
       } catch (e) {
         status.textContent = "Failed: " + e.message; status.className = "modal-status err";
         setDot("err");
@@ -387,115 +392,6 @@ const App = (() => {
 
     rerender = renderBoard;
     renderBoard();
-    refreshConnection().then(() => pull());
-  }
-
-  const OPENAI_PROXY = "https://webapp-two-peach.vercel.app/api/openai";
-
-  function openaiUrl() {
-    if (location.hostname.endsWith(".vercel.app")) return "/api/openai";
-    return OPENAI_PROXY;
-  }
-
-  async function aiEdit(action, text, company) {
-    const r = await fetch(openaiUrl(), {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action, text, company }),
-    });
-    const j = await r.json();
-    if (!r.ok) throw new Error(j.error || "AI request failed");
-    return j.text;
-  }
-
-  /* ───────── notes page ───────── */
-  let notesSlug = "";
-
-  function renderNotesPreview() {
-    const editor = $("notesEditor");
-    const preview = $("notesPreview");
-    if (!editor || !preview) return;
-    const raw = editor.value;
-    if (typeof marked !== "undefined") {
-      preview.innerHTML = marked.parse(raw, { breaks: true });
-    } else {
-      preview.textContent = raw;
-    }
-  }
-
-  function loadNoteForSlug(slug) {
-    notesSlug = slug;
-    const editor = $("notesEditor");
-    if (!editor) return;
-    editor.value = (data.notes && data.notes[slug]) || "";
-    renderNotesPreview();
-  }
-
-  function saveCurrentNote() {
-    if (!notesSlug) return;
-    const text = $("notesEditor").value;
-    mutate(d => {
-      if (!d.notes) d.notes = {};
-      if (text.trim()) d.notes[notesSlug] = text;
-      else delete d.notes[notesSlug];
-    });
-    toast("Note saved");
-  }
-
-  async function runAi(action) {
-    const status = $("notesStatus");
-    const editor = $("notesEditor");
-    const company = $("notesCompany");
-    if (!editor?.value.trim()) {
-      status.textContent = "Write something first.";
-      status.className = "notes-status err";
-      return;
-    }
-    status.textContent = "Working…";
-    status.className = "notes-status";
-    try {
-      const out = await aiEdit(action, editor.value, company?.selectedOptions[0]?.text || "");
-      editor.value = out;
-      renderNotesPreview();
-      saveCurrentNote();
-      status.textContent = "Updated — saved.";
-      status.className = "notes-status ok";
-    } catch (e) {
-      status.textContent = e.message;
-      status.className = "notes-status err";
-    }
-  }
-
-  async function initNotes() {
-    boot();
-    absorbMagicLink();
-    wireSettings();
-    await loadCompanies();
-
-    const sel = $("notesCompany");
-    companies.slice().sort((a, b) => a.name.localeCompare(b.name)).forEach(c => {
-      const o = document.createElement("option");
-      o.value = c.slug;
-      o.textContent = c.name;
-      sel.appendChild(o);
-    });
-
-    if (sel.options.length) {
-      loadNoteForSlug(sel.value);
-    }
-    sel.addEventListener("change", () => loadNoteForSlug(sel.value));
-    $("notesEditor").addEventListener("input", renderNotesPreview);
-    $("notesSaveBtn").addEventListener("click", saveCurrentNote);
-    $("aiPolishBtn").addEventListener("click", () => runAi("polish"));
-    $("aiExpandBtn").addEventListener("click", () => runAi("expand"));
-    $("aiSummarizeBtn").addEventListener("click", () => runAi("summarize"));
-
-    rerender = () => {
-      if (notesSlug) loadNoteForSlug(notesSlug);
-    };
-    refreshConnection().then(() => pull());
-  }
-
     refreshConnection().then(() => pull());
   }
 
@@ -765,11 +661,110 @@ const App = (() => {
     refreshConnection().then(() => pull());
   }
 
+  /* ───────── recruiter template page ───────── */
+  const RECRUITER_API_PROXY = "https://webapp-two-peach.vercel.app/api/recruiter";
+
+  function recruiterApi(path) {
+    if (location.hostname.endsWith(".vercel.app")) return `/api/recruiter/${path}`;
+    return `${RECRUITER_API_PROXY}/${path}`;
+  }
+
+  async function initRecruiter() {
+    boot();
+    absorbMagicLink();
+    wireSettings();
+
+    const context = $("recruiterContext");
+    const output = $("recruiterOutput");
+    const status = $("recruiterStatus");
+    const charCount = $("charCount");
+    const copyBtn = $("copyRecruiterBtn");
+    const modeBtns = document.querySelectorAll(".mode-btn");
+    let mode = "email";
+
+    function updateCharCount() {
+      if (!charCount || !output) return;
+      const len = output.value.length;
+      if (mode !== "linkedin" || !output.value.trim()) {
+        charCount.hidden = true;
+        return;
+      }
+      charCount.hidden = false;
+      charCount.textContent = `${len}/300`;
+      charCount.classList.toggle("over", len > 300);
+    }
+
+    modeBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        mode = btn.dataset.mode || "email";
+        modeBtns.forEach(b => {
+          const on = b === btn;
+          b.classList.toggle("active", on);
+          b.setAttribute("aria-selected", on ? "true" : "false");
+        });
+        updateCharCount();
+      });
+    });
+
+    $("generateRecruiterBtn")?.addEventListener("click", async () => {
+      if (!context?.value.trim()) {
+        status.textContent = "Add conversation context first.";
+        status.className = "resume-status err";
+        return;
+      }
+      status.textContent = mode === "linkedin" ? "Generating LinkedIn note (≤300 chars)…" : "Generating email…";
+      status.className = "resume-status";
+      $("generateRecruiterBtn").disabled = true;
+      copyBtn.disabled = true;
+      try {
+        const r = await fetch(recruiterApi("fill"), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            mode,
+            context: context.value,
+            name: $("recName")?.value || "",
+            event: $("recEvent")?.value || "",
+            role: $("recRole")?.value || "",
+            your_name: $("recYourName")?.value || "",
+          }),
+        });
+        const j = await r.json();
+        if (!r.ok) throw new Error(j.error || "Generation failed");
+        output.value = j.message || "";
+        copyBtn.disabled = !output.value.trim();
+        updateCharCount();
+        status.textContent = mode === "linkedin" ? "LinkedIn note ready — copy and send." : "Email ready — copy and send.";
+        status.className = "resume-status ok";
+      } catch (e) {
+        status.textContent = e.message;
+        status.className = "resume-status err";
+      } finally {
+        $("generateRecruiterBtn").disabled = false;
+      }
+    });
+
+    copyBtn?.addEventListener("click", async () => {
+      if (!output?.value.trim()) return;
+      try {
+        await navigator.clipboard.writeText(output.value);
+        toast("Copied to clipboard");
+      } catch {
+        output.select();
+        document.execCommand("copy");
+        toast("Copied to clipboard");
+      }
+    });
+
+    rerender = () => {};
+    refreshConnection().then(() => pull());
+  }
+
   /* ───────── utils ───────── */
   function esc(s) {
     return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
   }
   let rerender = () => {};
 
-  return { initBoard, initCalendar, initNotes, initResume };
+  return { initBoard, initCalendar, initResume, initRecruiter };
 })();
