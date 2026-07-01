@@ -30,43 +30,34 @@ Use **the same bot** as your job watcher (`TELEGRAM_BOT_TOKEN` in `Job_Notifier/
 
 ## Quick setup
 
-### Option A — Settings (manual)
+The bot token lives **only** server-side (Vercel env vars) — there's nothing to paste into the app itself anymore.
 
-1. Open https://webapp-two-peach.vercel.app
-2. Click **Settings**
-3. Paste **bot token** and **chat ID** from `Job_Notifier/.env`
-4. Click **Send test** — you should get a Telegram message and a **pink dot** next to Settings
-5. Hard-refresh once if needed: **Ctrl+Shift+R** (Cmd+Shift+R on Mac)
+### If you're using the live deployer's instance
 
-### Option B — Magic link (one click)
+Nothing to do — sync is on by default. Open Settings → **Send test** just to confirm you get a **pink dot** and a Telegram message. If it's gray, hard-refresh (**Ctrl+Shift+R** / Cmd+Shift+R on Mac).
 
-From the `Job_Notifier` repo (with `.env` filled in):
+### If you're deploying your own copy
 
-```bash
-cd /path/to/Job_Notifier
-.venv/bin/python -c "
-import base64, os
-from dotenv import load_dotenv
-load_dotenv()
-payload = base64.b64encode(
-    f\"{os.environ['TELEGRAM_BOT_TOKEN']}|{os.environ['TELEGRAM_CHAT_ID']}\".encode()
-).decode()
-print(f'https://webapp-two-peach.vercel.app/#cfg={payload}')
-"
-```
+1. Deploy this repo to Vercel (`npx vercel --prod` from this folder, or connect the repo in the Vercel dashboard).
+2. Project → **Settings → Environment Variables**, add:
 
-Open the printed URL once — settings save automatically and the hash is stripped from the address bar.
+   | Variable | Value |
+   |----------|-------|
+   | `TELEGRAM_BOT_TOKEN` | Same bot token as your watcher's `Job_Notifier/.env` |
+   | `TELEGRAM_CHAT_ID` | Same chat id as `.env` |
 
-### Option C — Pin the sync message (first time only)
+3. Redeploy so the new env vars take effect.
+4. Open your deployment → Settings → **Send test** — you should get a Telegram message and a pink dot.
+5. First time only, pin the shared sync message (run once from `Job_Notifier`, with `.env` filled in):
 
-If the webapp has nothing to sync against yet, run once from `Job_Notifier`:
+   ```bash
+   cd /path/to/Job_Notifier
+   .venv/bin/python scripts/bootstrap_pinned.py
+   ```
 
-```bash
-cd /path/to/Job_Notifier
-.venv/bin/python scripts/bootstrap_pinned.py
-```
+   This creates and pins the `JTRACK::` data message the app, watcher, and reminders all share.
 
-This creates and pins the `JTRACK::` data message the app, watcher, and reminders all share.
+**Heads up — this is single-tenant.** Whoever's `TELEGRAM_BOT_TOKEN`/`TELEGRAM_CHAT_ID` is set on a given Vercel deployment is who all sync/test-message traffic goes to, for *every* visitor to that URL. There's no per-visitor login. If you want your own private sync, deploy your own copy as above rather than using someone else's live URL.
 
 ---
 
